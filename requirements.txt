@@ -1,4 +1,4 @@
-altair
-pandas
-streamlit
-psycopg2-binary
+altair==5.0.1
+pandas==2.0.2
+streamlit==1.23.1
+psycopg2-binary==2.9.6
