@@ -1,6 +1,6 @@
-dataframe = None
+from dataservice.query import run_query
 
-from data-service.query import run_query
+dataframe = None
 
 st.title("""
 Netflix Recommendation System
