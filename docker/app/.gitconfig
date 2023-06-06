@@ -1,0 +1,8 @@
+[http]
+		        sslverify = false
+[user]
+		        email = krishch@umich.edu
+		        user = krishch72
+		        name = krishch72
+[credential]
+                        helper = store
