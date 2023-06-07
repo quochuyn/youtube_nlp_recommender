@@ -12,3 +12,4 @@ tabs = sidebar()
 
 if tabs == 'Dashboard':
     input_terms = st.text_input("Enter keywords")
+    
