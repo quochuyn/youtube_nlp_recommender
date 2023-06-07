@@ -1,3 +1,5 @@
+#!/usr/local/bin/python
+
 import psycopg2
 
 def init_connection():
