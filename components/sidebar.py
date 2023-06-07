@@ -19,3 +19,5 @@ def sidebar():
         st.title("Tom")
         st.write('Name of option is {}'.format(tabs))
     
+    return tabs
+    

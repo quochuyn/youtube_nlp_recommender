@@ -8,4 +8,7 @@ st.set_page_config(layout="wide")
 st.header("Custom tab component for on-hover navigation bar")
 st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
 
-sidebar()
+tabs = sidebar()
+
+if tabs == 'Dashboard':
+    input_terms = st.text_input("Enter keywords")
