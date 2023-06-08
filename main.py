@@ -27,13 +27,14 @@ st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsa
 tabs = sidebar()
 
 if tabs == 'Dashboard':
-    input_term = st.text_input("Enter keywords")
-    print("input_term", input_term)
+    search_words = st.text_input("Enter Search Words(seperated by comma if multiple)")
+    print("search_words", search_words)
+    
     session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
     st.text("")
 
-    if input_term:
-        stored_imgs = select_images(conn, input_term, session.slider_count) # your images here
+    if search_words:
+        stored_imgs = select_images(conn, search_words, session.slider_count) # your images here
         converted_imgs = []
         for img in stored_imgs:
             #pyscopg2 returns tuple, extract first key, which is memoryview for the image
