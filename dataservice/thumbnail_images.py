@@ -20,7 +20,7 @@ def load_images(conn):
                 cur.execute("insert into video_topics values ('" + video_id + "', ARRAY['stremlit',  'education'], 'https://www.youtube.com/watch?v=" + \
                             video_id + "'" + ') ON CONFLICT DO NOTHING')
                 #cur.execute("insert into video_thumbnails values('" + video_id + "', " + img_bytes + ")")
-                cur.execute('''INSERT INTO video_thumbnails VALUES (%s, %s)''', (video_id, img_bytes))
+                cur.execute('''INSERT INTO video_thumbnails VALUES (%s, %s) ON CONFLICT DO NOTHING''', (video_id, img_bytes))
     conn.commit()
 
 def fetch_images(conn):
