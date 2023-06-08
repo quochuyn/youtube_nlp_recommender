@@ -30,10 +30,11 @@ def fetch_images(conn):
         # cur.execute('''SELECT video_id FROM video_topics''')
 
         #print(cur.fetchone())
-        mview = cur.fetchone()
+        #mview = cur.fetchone()
         #print(type(mview[0]))
         #print(mview.tobytes())
         #new_bin_data = bytes(mview)
-        stored_imgs.append(BytesIO(base64.b64decode(mview[0])))
-    print("total len", len(stored_imgs))
-    return stored_imgs
+        return cur.fetchall()
+    #     stored_imgs.append(BytesIO(base64.b64decode(mview[0])))
+    # print("total len", len(stored_imgs))
+    # return stored_imgs

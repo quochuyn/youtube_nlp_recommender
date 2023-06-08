@@ -8,6 +8,7 @@ from dataservice.thumbnail_images import load_images, fetch_images
 from streamlit import session_state as session
 from io import BytesIO
 from itertools import cycle
+import base64
 
 
 def init_connection():
@@ -34,8 +35,15 @@ if tabs == 'Dashboard':
     # st.image(image_stream, caption='My Image')
 
     stored_imgs = fetch_images(conn) # your images here
-    print("total imgs", len(stored_imgs))
+    converted_imgs = []
+    for img in stored_imgs:
+        #pyscopg2 returns tuple, extract first key, which is memoryview for the image
+        mview = img[0]
+        print(type(mview))
+        converted_imgs.append(BytesIO(base64.b64decode(mview)))
+
+    print("total imgs", len(converted_imgs))
     caption = [] # your caption here
     cols = cycle(st.columns(4)) # st.columns here since it is out of beta at the time I'm writing this
-    for idx, stored_img in enumerate(stored_imgs):
-        next(cols).image(stored_img, width=150, caption='test')
+    for idx, converted_img in enumerate(converted_imgs):
+        next(cols).image(converted_img, width=150, caption='test')
