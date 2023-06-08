@@ -55,4 +55,13 @@ button[kind="header"] {
         width:15rem;
     }
 }
- 
+
+/* Hide the anchor link buttons which misbehave!*/
+/* based on https://discuss.streamlit.io/t/hide-titles-link/19783/12 */
+.stApp a:first-child {
+    display: none;
+}
+
+.css-15zrgzn {display: none}
+.css-eczf16 {display: none}
+.css-jn99sy {display: none}

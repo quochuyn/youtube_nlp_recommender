@@ -18,7 +18,7 @@ def load_images(conn):
             with conn.cursor() as cur:
                 video_id = img_file.split('.')[0]
                 cur.execute("insert into video_topics values ('" + video_id + "', ARRAY['stremlit',  'education'], 'https://www.youtube.com/watch?v=" + \
-                            video_id + "'" + ')')
+                            video_id + "'" + ') ON CONFLICT DO NOTHING')
                 #cur.execute("insert into video_thumbnails values('" + video_id + "', " + img_bytes + ")")
                 cur.execute('''INSERT INTO video_thumbnails VALUES (%s, %s)''', (video_id, img_bytes))
     conn.commit()

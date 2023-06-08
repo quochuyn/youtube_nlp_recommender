@@ -1,6 +1,6 @@
 create table video_topics (video_id text primary key, topics text[], video_url text)
 
-create table video_thumbnails(video_id text references video_topics(video_id), thumbnail bytea)
+create table video_thumbnails(video_id text references video_topics(video_id) primary key, thumbnail bytea)
 
 insert into video_topics values ('streamlit1', '{"stremlit",  "education"}', 'https://www.youtube.com/watch?v=3egaMfE9388')
 insert into video_topics values ('streamlit2', '{"stremlit",  "education", "capstone"}', 'https://youtube.com/watch?v=_s0bcrHO0Nk')
