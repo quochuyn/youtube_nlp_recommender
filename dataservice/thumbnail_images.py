@@ -25,13 +25,11 @@ def load_images(conn):
     conn.commit()
 
 def fetch_images(conn):
-    stored_imgs = []
     with conn.cursor() as cur:
         cur.execute('''SELECT thumbnail FROM video_thumbnails''')
         return cur.fetchall()
 
-
 def select_images(conn, keyword):
     with conn.cursor() as cur:
-        cur.execute('''SELECT video_id  FROM video_topics  WHERE %s = ANY (topics)''', (keyword))
+        cur.execute('''SELECT thumbnail FROM video_thumbnails where video_id in (SELECT video_id  FROM video_topics  WHERE %s = ANY (topics))''', (keyword))
         return cur.fetchall()
