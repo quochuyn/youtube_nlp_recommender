@@ -14,27 +14,24 @@ def load_images(conn):
         with open(file_path + img_file, "rb") as image:
             f = image.read()
             img_bytes = base64.b64encode(f)
-            print("inserting image from file {}".format(img_file))
+            st.text("inserting image from file {}".format(img_file))
             with conn.cursor() as cur:
                 video_id = img_file.split('.')[0]
                 cur.execute("insert into video_topics values ('" + video_id + "', ARRAY['stremlit',  'education'], 'https://www.youtube.com/watch?v=" + \
                             video_id + "'" + ') ON CONFLICT DO NOTHING')
                 #cur.execute("insert into video_thumbnails values('" + video_id + "', " + img_bytes + ")")
                 cur.execute('''INSERT INTO video_thumbnails VALUES (%s, %s) ON CONFLICT DO NOTHING''', (video_id, img_bytes))
+    st.text("Image upload complete!")
     conn.commit()
 
 def fetch_images(conn):
     stored_imgs = []
     with conn.cursor() as cur:
         cur.execute('''SELECT thumbnail FROM video_thumbnails''')
-        # cur.execute('''SELECT video_id FROM video_topics''')
-
-        #print(cur.fetchone())
-        #mview = cur.fetchone()
-        #print(type(mview[0]))
-        #print(mview.tobytes())
-        #new_bin_data = bytes(mview)
         return cur.fetchall()
-    #     stored_imgs.append(BytesIO(base64.b64decode(mview[0])))
-    # print("total len", len(stored_imgs))
-    # return stored_imgs
+
+
+def select_images(conn, keyword):
+    with conn.cursor() as cur:
+        cur.execute('''SELECT video_id  FROM video_topics  WHERE %s = ANY (topics)''', (keyword))
+        return cur.fetchall()

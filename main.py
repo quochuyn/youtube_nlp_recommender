@@ -25,11 +25,8 @@ tabs = sidebar()
 
 if tabs == 'Dashboard':
     input_terms = st.text_input("Enter keywords")
-    session.slider_count = st.slider(label="movie_count", min_value=5, max_value=50)
-    # image_bytes = fetch_images(conn)
-    # # # Create a binary stream
-    # image_stream = BytesIO(image_bytes)
-    # st.image(image_stream, caption='My Image')
+    session.slider_count = st.slider(label="video_count", min_value=5, max_value=50)
+    st.text("")
 
     stored_imgs = fetch_images(conn) # your images here
     converted_imgs = []
