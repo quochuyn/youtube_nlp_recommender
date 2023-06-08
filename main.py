@@ -27,13 +27,16 @@ st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsa
 tabs = sidebar()
 
 if tabs == 'Dashboard':
-    search_words = st.text_input("Enter Search Words(seperated by comma if multiple)")
+    all_words = st.text_input("Enter Search Words(seperated by comma if multiple)")
+    search_words = all_words.split(',')
+    print(search_words)
+    search_words = [x.strip() for x in search_words if x]
     print("search_words", search_words)
-    
+
     session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
     st.text("")
 
-    if search_words:
+    if len(search_words) > 0:
         stored_imgs = select_images(conn, search_words, session.slider_count) # your images here
         converted_imgs = []
         for img in stored_imgs:
