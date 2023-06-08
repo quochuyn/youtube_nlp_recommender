@@ -31,7 +31,7 @@ def fetch_images(conn):
         cur.execute('''SELECT thumbnail FROM video_thumbnails''')
         return cur.fetchall()
 
-def select_images(conn, keyword):
+def select_images(conn, keyword, img_count):
     with conn.cursor() as cur:
         cur.execute("SELECT thumbnail FROM video_thumbnails where video_id in (SELECT video_id  FROM video_topics  WHERE '{}' = ANY (topics))".format(keyword))
-        return cur.fetchall()
+        return cur.fetchmany(img_count)

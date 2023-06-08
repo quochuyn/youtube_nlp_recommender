@@ -26,11 +26,11 @@ tabs = sidebar()
 if tabs == 'Dashboard':
     input_term = st.text_input("Enter keywords")
     print("input_term", input_term)
-    session.slider_count = st.slider(label="video_count", min_value=5, max_value=50)
+    session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
     st.text("")
 
     if input_term:
-        stored_imgs = select_images(conn, input_term) # your images here
+        stored_imgs = select_images(conn, input_term, session.slider_count) # your images here
         converted_imgs = []
         for img in stored_imgs:
             #pyscopg2 returns tuple, extract first key, which is memoryview for the image
