@@ -5,6 +5,7 @@ import streamlit as st
 from os.path import isfile, join
 from os import listdir
 import base64
+from io import BytesIO
 
 def load_images(conn):
     file_path = "/images/"
@@ -23,14 +24,16 @@ def load_images(conn):
     conn.commit()
 
 def fetch_images(conn):
+    stored_imgs = []
     with conn.cursor() as cur:
         cur.execute('''SELECT thumbnail FROM video_thumbnails''')
         # cur.execute('''SELECT video_id FROM video_topics''')
 
         #print(cur.fetchone())
         mview = cur.fetchone()
-        print(type(mview[0]))
+        #print(type(mview[0]))
         #print(mview.tobytes())
         #new_bin_data = bytes(mview)
-        stored_img = base64.b64decode(mview[0])
-        return stored_img
+        stored_imgs.append(BytesIO(base64.b64decode(mview[0])))
+    print("total len", len(stored_imgs))
+    return stored_imgs

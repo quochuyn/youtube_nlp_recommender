@@ -4,8 +4,10 @@ import streamlit as st
 import psycopg2
 # from dataservice.query import run_query
 from components.sidebar import sidebar
-from dataservice.load_images import load_images, fetch_images
+from dataservice.thumbnail_images import load_images, fetch_images
+from streamlit import session_state as session
 from io import BytesIO
+from itertools import cycle
 
 
 def init_connection():
@@ -13,19 +15,27 @@ def init_connection():
 
 conn = init_connection()
 
-# load_images(conn)
+def load_local_images(conn):
+    load_images(conn)
 
-# st.set_page_config(layout="wide")
+st.set_page_config(layout="wide")
 
-# st.header("Custom tab component for on-hover navigation bar")
-# st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
+st.header("Custom tab component for on-hover navigation bar")
+st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
 
-# tabs = sidebar()
+tabs = sidebar()
 
-# if tabs == 'Dashboard':
-#     input_terms = st.text_input("Enter keywords")
+if tabs == 'Dashboard':
+    input_terms = st.text_input("Enter keywords")
+    session.slider_count = st.slider(label="movie_count", min_value=5, max_value=50)
+    # image_bytes = fetch_images(conn)
+    # # # Create a binary stream
+    # image_stream = BytesIO(image_bytes)
+    # st.image(image_stream, caption='My Image')
 
-image_bytes = fetch_images(conn)
-# # # Create a binary stream
-image_stream = BytesIO(image_bytes)
-st.image(image_stream, caption='My Image')
+    stored_imgs = fetch_images(conn) # your images here
+    print("total imgs", len(stored_imgs))
+    caption = [] # your caption here
+    cols = cycle(st.columns(4)) # st.columns here since it is out of beta at the time I'm writing this
+    for idx, stored_img in enumerate(stored_imgs):
+        next(cols).image(stored_img, width=150, caption='test')
