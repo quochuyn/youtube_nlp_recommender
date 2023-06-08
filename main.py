@@ -18,7 +18,10 @@ conn = init_connection()
 
 st.set_page_config(layout="wide")
 
-st.header("Custom tab component for on-hover navigation bar")
+#st.header("Youtube Recommendation App")
+app_header = "<h1 style='text-align: center; color: black;'>Youtube Recommendation App</h1>"
+st.markdown(app_header, unsafe_allow_html=True)
+
 st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
 
 tabs = sidebar()
