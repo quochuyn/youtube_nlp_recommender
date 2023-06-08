@@ -4,8 +4,8 @@ import streamlit as st
 
 def sidebar():
     with st.sidebar:
-        tabs = on_hover_tabs(tabName=['Dashboard', 'Account Setting', 'Economy'], 
-                            iconName=['dashboard', 'manage_accounts', 'economy'], default_choice=0)
+        tabs = on_hover_tabs(tabName=['Dashboard', 'Account Setting', 'Upload'], 
+                            iconName=['dashboard', 'manage_accounts', 'upload'], default_choice=0)
 
     if tabs =='Dashboard':
         st.title("Navigation Bar")
@@ -15,8 +15,8 @@ def sidebar():
         st.title("User Personal Settings")
         st.write('Name of option is {}'.format(tabs))
 
-    elif tabs == 'Economy':
-        st.title("Tom")
+    elif tabs == 'Upload':
+        st.title("Image Upload to Postgres")
         st.write('Name of option is {}'.format(tabs))
     
     return tabs

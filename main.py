@@ -16,9 +16,6 @@ def init_connection():
 
 conn = init_connection()
 
-def load_local_images(conn):
-    load_images(conn)
-
 st.set_page_config(layout="wide")
 
 st.header("Custom tab component for on-hover navigation bar")
@@ -47,3 +44,5 @@ if tabs == 'Dashboard':
     cols = cycle(st.columns(4)) # st.columns here since it is out of beta at the time I'm writing this
     for idx, converted_img in enumerate(converted_imgs):
         next(cols).image(converted_img, width=150, caption='test')
+elif tabs == 'Upload':
+    load_images(conn)

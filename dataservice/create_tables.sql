@@ -4,6 +4,8 @@ create table video_thumbnails(video_id text references video_topics(video_id), t
 
 insert into video_topics values ('streamlit1', '{"stremlit",  "education"}', 'https://www.youtube.com/watch?v=3egaMfE9388')
 insert into video_topics values ('streamlit2', '{"stremlit",  "education", "capstone"}', 'https://youtube.com/watch?v=_s0bcrHO0Nk')
+insert into video_topics values ('chatgpt1', '{"chatgpt",  "education", "capstone"}', 'https://youtube.com/watch?v=MlK6SIjcjE8')
+
 
 insert into video_thumbnails values('streamlit1', bytea('/images/3egaMfE9388.jpg'))
 insert into video_thumbnails values('streamlit2', bytea('/images/_s0bcrHO0Nk-SD.jpg'))
