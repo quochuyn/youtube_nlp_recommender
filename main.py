@@ -10,6 +10,7 @@ from io import BytesIO
 from itertools import cycle
 import base64
 from streamlit_player import st_player
+from st_click_detector import click_detector
 
 
 def init_connection():
@@ -21,6 +22,24 @@ st.set_page_config(layout="wide")
 
 # Embed a youtube video
 st_player("https://youtu.be/CmSKVW1v0xM")
+
+if "n_clicks" not in st.session_state:
+    st.session_state["n_clicks"] = "0"
+
+with st.sidebar:
+    choice = st.radio("Radio", [1, 2, 3])
+
+id = str(int(st.session_state["n_clicks"]) + 1)
+
+content = f"<a href='#' id='{id}'><img src='https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-7/256/Save-icon.png'></a>"
+
+clicked = click_detector(content, key="click_detector")
+
+if clicked != "" and clicked != st.session_state["n_clicks"]:
+    st.session_state["n_clicks"] = clicked
+    st.subheader("Saving Report..")
+else:
+    st.subheader(f"Choice: #{choice}")
 
 #st.header("Youtube Recommendation App")
 app_header = "<h1 style='text-align: center; color: black;'>Youtube Recommendation App</h1>"
