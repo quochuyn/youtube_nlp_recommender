@@ -9,6 +9,7 @@ from streamlit import session_state as session
 from io import BytesIO
 from itertools import cycle
 import base64
+from streamlit_player import st_player
 
 
 def init_connection():
@@ -17,6 +18,9 @@ def init_connection():
 conn = init_connection()
 
 st.set_page_config(layout="wide")
+
+# Embed a youtube video
+st_player("https://youtu.be/CmSKVW1v0xM")
 
 #st.header("Youtube Recommendation App")
 app_header = "<h1 style='text-align: center; color: black;'>Youtube Recommendation App</h1>"
