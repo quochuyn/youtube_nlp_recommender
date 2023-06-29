@@ -62,17 +62,20 @@ if tabs == 'Dashboard':
     if len(search_words) > 0:
         stored_imgs = select_images(conn, search_words, session.slider_count) # your images here
         converted_imgs = []
+        video_ids = []
         for img in stored_imgs:
             #pyscopg2 returns tuple, extract first key, which is memoryview for the image
             mview = img[0]
-            print(type(mview))
+            #print(type(mview))
+            #print(img[1])
+            video_ids.append(img[1])
             converted_imgs.append(BytesIO(base64.b64decode(mview)))
 
         print("total imgs", len(converted_imgs))
         caption = [] # your caption here
         cols = cycle(st.columns(4)) # st.columns here since it is out of beta at the time I'm writing this
         for idx, converted_img in enumerate(converted_imgs):
-            next(cols).image(converted_img, width=150, caption='test')
+            next(cols).image(converted_img, width=150, caption=video_ids[idx])
 elif tabs == 'Upload':
     topics = ["streamlit", "education"]
     load_images(conn, topics)
