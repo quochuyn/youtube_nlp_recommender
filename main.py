@@ -20,26 +20,24 @@ conn = init_connection()
 
 st.set_page_config(layout="wide")
 
-# Embed a youtube video
-st_player("https://youtu.be/CmSKVW1v0xM")
 
-if "n_clicks" not in st.session_state:
-    st.session_state["n_clicks"] = "0"
+# if "n_clicks" not in st.session_state:
+#     st.session_state["n_clicks"] = "0"
 
-with st.sidebar:
-    choice = st.radio("Radio", [1, 2, 3])
+# with st.sidebar:
+#     choice = st.radio("Radio", [1, 2, 3])
 
-id = str(int(st.session_state["n_clicks"]) + 1)
+# id = str(int(st.session_state["n_clicks"]) + 1)
 
-content = f"<a href='#' id='{id}'><img src='https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-7/256/Save-icon.png'></a>"
+# content = f"<a href='#' id='{id}'><img src='https://icons.iconarchive.com/icons/custom-icon-design/pretty-office-7/256/Save-icon.png'></a>"
 
-clicked = click_detector(content, key="click_detector")
+# clicked = click_detector(content, key="click_detector")
 
-if clicked != "" and clicked != st.session_state["n_clicks"]:
-    st.session_state["n_clicks"] = clicked
-    st.subheader("Saving Report..")
-else:
-    st.subheader(f"Choice: #{choice}")
+# if clicked != "" and clicked != st.session_state["n_clicks"]:
+#     st.session_state["n_clicks"] = clicked
+#     st.subheader("Saving Report..")
+# else:
+#     st.subheader(f"Choice: #{choice}")
 
 #st.header("Youtube Recommendation App")
 app_header = "<h1 style='text-align: center; color: black;'>Youtube Recommendation App</h1>"
@@ -73,9 +71,13 @@ if tabs == 'Dashboard':
 
         print("total imgs", len(converted_imgs))
         caption = [] # your caption here
-        cols = cycle(st.columns(4)) # st.columns here since it is out of beta at the time I'm writing this
+        cols = cycle(st.columns(4))
         for idx, converted_img in enumerate(converted_imgs):
-            next(cols).image(converted_img, width=150, caption=video_ids[idx])
+            #next(cols).image(converted_img, width=150, caption=video_ids[idx])
+            with next(cols):
+                # Embed a youtube video
+                st_player(url="https://youtu.be/" + video_ids[idx], controls=True)
+
 elif tabs == 'Upload':
     topics = ["streamlit", "education"]
     load_images(conn, topics)
