@@ -50,3 +50,5 @@ if __name__ == "__main__":
     )   
 
     name, authentication_status, username = authenticator.login('Login', 'main')
+
+    print(authentication_status)
