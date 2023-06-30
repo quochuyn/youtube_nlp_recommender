@@ -1,0 +1,18 @@
+credentials:
+  usernames:
+    krishch:
+      email: krishch@umich.edu
+      name: krishan chawla
+      password: '$2b$12$beT7VqqdxTOqQ0uEs58DLu.RfYPM.rWp3zBE6uwpTqDs0SKLnqwjm' # To be replaced with hashed password
+    qh:
+      email: qh@umich.edu
+      name: q h
+      password: '$2b$12$beT7VqqdxTOqQ0uEs58DLu.RfYPM.rWp3zBE6uwpTqDs0SKLnqwjm' # To be replaced with hashed password
+cookie:
+  expiry_days: 30
+  key: 'test' # Must be string
+  name: 'test'
+preauthorized:
+  emails:
+  - krishch@umich.edu
+  - qh@umich.edu
