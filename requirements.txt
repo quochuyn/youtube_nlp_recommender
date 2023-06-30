@@ -6,3 +6,4 @@ streamlit-on-Hover-tabs==1.0.1
 streamlit-player==0.1.5
 st_click_detector==0.1.3
 streamlit-authenticator==0.2.2
+sqlalchemy==2.0.17
