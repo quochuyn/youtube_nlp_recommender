@@ -12,6 +12,7 @@ import base64
 from streamlit_player import st_player
 from st_click_detector import click_detector
 from auth_app import auth_from_db, auth_from_yaml
+from user_profile import modify_profile
 
 
 def init_connection():
@@ -26,7 +27,7 @@ def app_layout():
 
     st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
 
-def utube_app():
+def utube_app(username):
     conn = init_connection()
     tabs = sidebar()
 
@@ -64,6 +65,8 @@ def utube_app():
     elif tabs == 'Upload':
         topics = ["streamlit", "education"]
         load_images(conn, topics)
+    elif tabs == 'Account Setting':
+        modify_profile(username)
     
 
 app_layout()
@@ -76,8 +79,7 @@ name, authentication_status, username = authenticator.login('Login', 'main')
 if authentication_status:
     authenticator.logout('Logout', 'main', key='unique_key')
     st.write(f'Welcome *{name}*')
-    st.title('Some content')
-    utube_app()
+    utube_app(username)
 elif authentication_status is False:
     st.error('Username/password is incorrect')
 elif authentication_status is None:
