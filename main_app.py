@@ -66,7 +66,7 @@ def utube_app(username):
         topics = ["streamlit", "education"]
         load_images(conn, topics)
     elif tabs == 'Account Setting':
-        modify_profile(username)
+        modify_profile(conn, username)
     
 
 app_layout()

@@ -2,8 +2,10 @@ import streamlit as st
 import pandas as pd
 from st_aggrid import AgGrid
 from sqlalchemy import create_engine, text
+from psycopg2.extensions import AsIs
 
-def modify_profile(username):
+
+def modify_profile(conn, username):
     dbcredentials = st.secrets["postgres"]
 
     dbEngine = create_engine('postgresql+psycopg2://' +
@@ -33,4 +35,23 @@ def modify_profile(username):
     grid_return = AgGrid(username_df, grid_options)
     new_df = grid_return["data"]
 
+    print(new_df['search_words'].values[0])
+    new_search_words = new_df['search_words'].values[0]
+
+    if not isinstance(new_search_words, list):
+        new_search_words = new_search_words.split(',')
+
+    new_filtered_words = new_df['filtered_words'].values[0]
+    
+    if not isinstance(new_filtered_words, list):
+        new_filtered_words = new_filtered_words.split(',')
+    
     st.write(new_df)
+
+    if st.button('Save'):
+        st.write('Saving changes...')
+        with conn.cursor() as cur:
+            cur.execute("update user_profile set search_words = %s,  filtered_words = %s where username = '%s'", 
+                                    (new_search_words, new_filtered_words,  AsIs(username)))
+        st.write('Saving Done!')
+        conn.commit()
