@@ -18,7 +18,7 @@ dbEngine = create_engine('postgresql+psycopg2://' +
 username_df = pd.read_sql(sql = text("select username from user_profile"), con=dbEngine.connect())
 userdetails_df = pd.read_sql(sql = text("select * from user_profile"), con=dbEngine.connect())
 cookie_df = pd.read_sql(sql = text("select * from session_cookie"), con=dbEngine.connect())
-preauth_df = pd.read_sql(sql = text("select email from user_profile where preauth == True"), con=dbEngine.connect())
+preauth_df = pd.read_sql(sql = text("select email from user_profile where preauth = True"), con=dbEngine.connect())
 
 if __name__ == "__main__":
     #mydict = user_df.to_dict('records')
@@ -36,4 +36,17 @@ if __name__ == "__main__":
     print(credentials_dict)
     print(credentials_dict['usernames']['krishch']['email'])
 
+    preauth_dict = {}
+    preauth_dict['emails'] = preauth_df['email'].to_list()
+    print(preauth_dict)
     
+    print(cookie_df['name'].values[0])
+    authenticator = stauth.Authenticate(
+        credentials_dict,
+        cookie_df['name'].values[0],
+        cookie_df['key'].values[0],
+        cookie_df['expiry_days'].values[0],
+        preauth_dict
+    )   
+
+    name, authentication_status, username = authenticator.login('Login', 'main')
