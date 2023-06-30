@@ -6,6 +6,7 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 import yaml
 from yaml.loader import SafeLoader
+#from main_app import utube_app, app_layout
 
 def auth_from_db():
     dbcredentials = st.secrets["postgres"]
@@ -32,7 +33,7 @@ def auth_from_db():
     #print(user_dict)
     credentials_dict = {}
     credentials_dict['usernames'] = user_dict
-    print(credentials_dict)
+    #print(credentials_dict)
     #print(credentials_dict['usernames']['krishch']['email'])
 
     preauth_dict = {}
@@ -67,17 +68,3 @@ def auth_from_yaml():
         config['preauthorized']
     )
     return authenticator
-
-authenticator = auth_from_db()
-name, authentication_status, username = authenticator.login('Login', 'main')
-
-print("name ", name, "auth ", authentication_status, "username ", username)
-
-if authentication_status:
-    authenticator.logout('Logout', 'main', key='unique_key')
-    st.write(f'Welcome *{name}*')
-    st.title('Some content')
-elif authentication_status is False:
-    st.error('Username/password is incorrect')
-elif authentication_status is None:
-    st.warning('Please enter your username and password')
