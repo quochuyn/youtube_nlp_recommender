@@ -73,7 +73,6 @@ name, authentication_status, username = authenticator.login('Login', 'main')
 
 #print("name ", name, "auth ", authentication_status, "username ", username)
 
-
 if authentication_status:
     authenticator.logout('Logout', 'main', key='unique_key')
     st.write(f'Welcome *{name}*')
