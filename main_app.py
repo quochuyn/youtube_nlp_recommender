@@ -13,7 +13,9 @@ from streamlit_player import st_player
 from st_click_detector import click_detector
 from auth_app import auth_from_db, auth_from_yaml
 from user_profile import modify_profile
-
+from sqlalchemy import create_engine, text
+import pandas as pd
+import ast
 
 def init_connection():
     return psycopg2.connect(**st.secrets["postgres"])
@@ -32,7 +34,22 @@ def utube_app(username):
     tabs = sidebar()
 
     if tabs == 'Dashboard':
-        all_words = st.text_input("Enter Search Words(seperated by comma if multiple)")
+        dbcredentials = st.secrets["postgres"]
+
+        dbEngine = create_engine('postgresql+psycopg2://' +
+            dbcredentials['user'] + ':' +
+            dbcredentials['password'] + '@' +
+            dbcredentials['host'] + ':' +
+            str(dbcredentials['port']) + '/' +
+            dbcredentials['dbname'])
+
+        profile_searchwords = pd.read_sql(sql = text("select search_words " + \
+                                    " from user_profile where username = '" + username + "'"), 
+                                    con=dbEngine.connect())['search_words'].values[0]
+        print("profile searchwords ", profile_searchwords, type(profile_searchwords))
+
+        all_words = st.text_input("Enter Search Words(seperated by comma if multiple)", value = ','.join(profile_searchwords))
+
         search_words = all_words.split(',')
         print(search_words)
         search_words = [x.strip() for x in search_words if x]

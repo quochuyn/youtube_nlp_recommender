@@ -15,8 +15,11 @@ def modify_profile(conn, username):
         str(dbcredentials['port']) + '/' +
         dbcredentials['dbname'])
 
-    username_df = pd.read_sql(sql = text("select * from user_profile where username = '" + username + "'"), con=dbEngine.connect())
+    username_df = pd.read_sql(sql = text("select username, array_to_string(search_words, ',') search_words, " + \
+                    " array_to_string(filtered_words, ',') filtered_words " + \
+                    " from user_profile where username = '" + username + "'"), con=dbEngine.connect())
 
+    print(username_df)
     grid_options = {
         "columnDefs": [
             {
@@ -35,23 +38,23 @@ def modify_profile(conn, username):
     grid_return = AgGrid(username_df, grid_options)
     new_df = grid_return["data"]
 
-    print(new_df['search_words'].values[0])
+    #print(new_df['search_words'].values[0])
     new_search_words = new_df['search_words'].values[0]
 
-    if not isinstance(new_search_words, list):
-        new_search_words = new_search_words.split(',')
+    # if not isinstance(new_search_words, list):
+    #     new_search_words = new_search_words.split(',')
 
     new_filtered_words = new_df['filtered_words'].values[0]
     
-    if not isinstance(new_filtered_words, list):
-        new_filtered_words = new_filtered_words.split(',')
+    # if not isinstance(new_filtered_words, list):
+    #     new_filtered_words = new_filtered_words.split(',')
     
     st.write(new_df)
 
     if st.button('Save'):
-        st.write('Saving changes...')
+        st.write('Saving changes search {} and filter {}...'.format(new_search_words, new_filtered_words))
         with conn.cursor() as cur:
-            cur.execute("update user_profile set search_words = %s,  filtered_words = %s where username = '%s'", 
+            cur.execute("update user_profile set search_words = array[%s],  filtered_words = array[%s] where username = '%s'", 
                                     (new_search_words, new_filtered_words,  AsIs(username)))
         st.write('Saving Done!')
         conn.commit()
