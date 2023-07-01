@@ -48,7 +48,10 @@ def modify_profile(conn, username):
     
     # if not isinstance(new_filtered_words, list):
     #     new_filtered_words = new_filtered_words.split(',')
-    
+
+    account_title = '<p style="font-family:Courier; color:Black; font-size: 20px;">User Personal Settings(After Changes..)</p>'
+    st.markdown(account_title, unsafe_allow_html=True)
+
     st.write(new_df)
 
     if st.button('Save'):
