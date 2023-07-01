@@ -10,7 +10,7 @@ import base64
 from io import BytesIO
 
 def load_images(conn, topics):
-    file_path = "/images/"
+    file_path = "./sample_images/"
     file_list = [f for f in listdir(file_path) if isfile(join(file_path, f))]
     for img_file in file_list:
         with open(file_path + img_file, "rb") as image:
