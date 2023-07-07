@@ -128,10 +128,10 @@ def search_youtube(
             'channel_id' : video_snippet['channelId'],
             'title' : video_snippet['title'],
             'description' : video_snippet['description'],
+            'channel_title' : video_snippet['channelTitle'],
             'thumbnail_default_url' : video_snippet['thumbnails']['default']['url'],
             'thumbnail_medium_url' : video_snippet['thumbnails']['medium']['url'],
             'thumbnail_high_url' : video_snippet['thumbnails']['high']['url'],
-            'channel_title' : video_snippet['channelTitle'],
         }
         video_list.append(video_values)
         video_ids.append(video['id']['videoId'])
@@ -152,6 +152,8 @@ def search_youtube(
 
         # update video values to include extra info
         extra_video_values = {
+            'thumbnail_standard_url' : video_snippet['thumbnails']['standard']['url'],
+            'thumbnail_maxres_url' : video_snippet['thumbnails']['maxres']['url'],
             'tags' : video_snippet['tags'] if 'tags' in video_snippet.keys() else '[]',
             'video_duration' : video_content_details['duration'],
             'video_caption' : video_content_details['caption'],
