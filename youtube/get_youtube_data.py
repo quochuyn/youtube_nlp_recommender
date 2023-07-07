@@ -98,6 +98,7 @@ def search_youtube(
     order : str, default='relevance'
         The metric to order the search results. Acceptable values are
         ['date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount'].
+        
     Returns
     -------
     df : pd.DataFrame
