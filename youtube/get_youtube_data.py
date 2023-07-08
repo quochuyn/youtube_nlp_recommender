@@ -40,7 +40,7 @@ def get_youtube_api_key_list() -> list[str]:
         overview page: https://developers.google.com/youtube/v3/getting-started
     """
 
-    with open('./youtube/secrets.toml', 'rb') as read_file:
+    with open('./secrets.toml', 'rb') as read_file:
         secrets = tomli.load(read_file)
     
     # return only key values
