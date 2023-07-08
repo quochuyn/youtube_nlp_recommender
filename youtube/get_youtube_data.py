@@ -9,7 +9,7 @@ import googleapiclient.discovery
 
 # utils
 import tomli
-import utils
+from .youtube_utils import convert_isodate_to_seconds
 
 
 
@@ -23,7 +23,7 @@ def get_youtube_api_key() -> str:
     """
 
 
-    with open('./secrets.toml', 'rb') as read_file:
+    with open('./youtube/secrets.toml', 'rb') as read_file:
         secrets = tomli.load(read_file)
     
     return secrets['api']['key1']
@@ -40,7 +40,7 @@ def get_youtube_api_key_list() -> list[str]:
         overview page: https://developers.google.com/youtube/v3/getting-started
     """
 
-    with open('./secrets.toml', 'rb') as read_file:
+    with open('./youtube/secrets.toml', 'rb') as read_file:
         secrets = tomli.load(read_file)
     
     # return only key values
@@ -109,6 +109,7 @@ def search_youtube(
     assert 0 < max_vids <= 50, f"Value for max_vids ({max_vids}) is not within range of acceptable values."
     assert order in ['date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount'], f"Value for order ({order}) is not one of the acceptable values."
 
+    print("input query ", query)
     # search by query
     search_response = youtube.search().list(
         part='snippet',
@@ -180,7 +181,7 @@ def _clean_youtube_df(youtube_df):
     """
 
     # convert the video_duration (ISO 8601 duration string) into seconds.
-    youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(utils.convert_isodate_to_seconds)
+    youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(convert_isodate_to_seconds)
 
     return youtube_df
 
