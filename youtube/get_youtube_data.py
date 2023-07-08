@@ -154,7 +154,7 @@ def search_youtube(
         # update video values to include extra info
         extra_video_values = {
             'thumbnail_standard_url' : video_snippet['thumbnails']['standard']['url'],
-            'thumbnail_maxres_url' : video_snippet['thumbnails']['maxres']['url'],
+            #'thumbnail_maxres_url' : video_snippet['thumbnails']['maxres']['url'],
             'tags' : video_snippet['tags'] if 'tags' in video_snippet.keys() else '[]',
             'video_duration' : video_content_details['duration'],
             'video_caption' : video_content_details['caption'],
