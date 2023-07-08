@@ -64,12 +64,13 @@ def utube_app(username):
         youtube = make_client(YOUTUBE_API_KEY)
         youtube_df = search_youtube(
             youtube,
-            query= "'" + search_words[0] + "'",
+            #query= "'" + search_words[0] + "'",
+            query='bossa nova',
             max_vids=50,        # youtube accepts 50 as the max value
             order='relevance'   # default is relevance
         )
 
-        youtube_video_ids = youtube_df.head(session.slider_count)[video_id].values
+        youtube_video_ids = youtube_df.head(session.slider_count)
         print(youtube_video_ids)
 
         if len(search_words) > 0:
@@ -93,7 +94,14 @@ def utube_app(username):
                     # Embed a youtube video
                     st_player(url="https://youtu.be/" + video_ids[idx], controls=True)
                 
-            
+        
+        tmp_message = '<p style="font-family:Courier; color:Black; font-size: 20px;">Based on query -> bossa nova to youtube api</p>'
+        st.markdown(tmp_message, unsafe_allow_html=True)
+        cols = cycle(st.columns(4))
+        for idx, row in youtube_video_ids.iterrows():
+            with next(cols):
+                # Embed a youtube video
+                st_player(url="https://youtu.be/" + row['video_id'], controls=True)
 
     elif tabs == 'Upload':
         topics = ["streamlit", "education"]
