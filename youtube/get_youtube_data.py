@@ -23,7 +23,7 @@ def get_youtube_api_key() -> str:
     """
 
 
-    with open('./youtube/secrets.toml', 'rb') as read_file:
+    with open('./secrets.toml', 'rb') as read_file:
         secrets = tomli.load(read_file)
     
     return secrets['api']['key1']
