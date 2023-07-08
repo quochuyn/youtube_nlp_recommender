@@ -11,6 +11,9 @@ button[kind="header"] {
     color:rgb(180, 167, 141)
 }
 
+#MainMenu {visibility: hidden;}
+            footer {visibility: hidden;}
+
 @media(hover){
     /* header element to be removed */
     header[data-testid="stHeader"] {

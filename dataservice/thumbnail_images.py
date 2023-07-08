@@ -10,7 +10,7 @@ import base64
 from io import BytesIO
 
 def load_images(conn, topics):
-    file_path = "/images/"
+    file_path = "./sample_images/"
     file_list = [f for f in listdir(file_path) if isfile(join(file_path, f))]
     for img_file in file_list:
         with open(file_path + img_file, "rb") as image:
@@ -33,7 +33,7 @@ def fetch_images(conn):
 
 def select_images(conn, search_words, img_count):
     with conn.cursor() as cur:
-        cur.execute("SELECT thumbnail FROM video_thumbnails where " + \
+        cur.execute("SELECT thumbnail, video_id FROM video_thumbnails where " + \
                         " video_id in " + \
                             " (SELECT video_id  FROM video_topics  WHERE topics && ARRAY{})".format(search_words))
 
