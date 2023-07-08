@@ -147,29 +147,29 @@ def search_youtube(
     ).execute()
 
     # loop through list of videos
-    for index, video in enumerate(videos_response['items']):
-        video_snippet = video['snippet']
-        video_content_details = video['contentDetails']
-        video_statistics = video['statistics']
+    # for index, video in enumerate(videos_response['items']):
+    #     video_snippet = video['snippet']
+    #     video_content_details = video['contentDetails']
+    #     video_statistics = video['statistics']
 
-        # update video values to include extra info
-        extra_video_values = {
-            'thumbnail_standard_url' : video_snippet['thumbnails']['standard']['url'],
-            #'thumbnail_maxres_url' : video_snippet['thumbnails']['maxres']['url'],
-            'tags' : video_snippet['tags'] if 'tags' in video_snippet.keys() else '[]',
-            'video_duration' : video_content_details['duration'],
-            'video_caption' : video_content_details['caption'],
-            'video_view_count' : video_statistics['viewCount'],
-            'video_like_count' : video_statistics['likeCount'],
-            'video_comment_count' : video_statistics['commentCount']
-        }
-        video_list[index].update(extra_video_values)
+    #     # update video values to include extra info
+    #     extra_video_values = {
+    #         'thumbnail_standard_url' : video_snippet['thumbnails']['standard']['url'],
+    #         #'thumbnail_maxres_url' : video_snippet['thumbnails']['maxres']['url'],
+    #         'tags' : video_snippet['tags'] if 'tags' in video_snippet.keys() else '[]',
+    #         'video_duration' : video_content_details['duration'],
+    #         'video_caption' : video_content_details['caption'],
+    #         'video_view_count' : video_statistics['viewCount'],
+    #         'video_like_count' : video_statistics['likeCount'],
+    #         'video_comment_count' : video_statistics['commentCount']
+    #     }
+    #     video_list[index].update(extra_video_values)
 
     # TODO: get video transcripts if video_caption == True
     
     df = pd.DataFrame(video_list)
 
-    df = _clean_youtube_df(df)
+    #df = _clean_youtube_df(df)
 
     return df
 
