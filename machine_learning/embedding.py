@@ -27,7 +27,8 @@ def filter_out_embed(filter_sent,list_of_videos):
         embedding_uniq_vid = model.encode(i, convert_to_tensor=True)
         result = util.pytorch_cos_sim(embedding_filter, embedding_uniq_vid)
         print(result,i)
-        results.append(result)
+        if result >0.19:
+            results.append(result)
     return results
 filter_out_embed(filter_sent,list_of_videos)
 """
