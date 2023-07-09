@@ -20,12 +20,15 @@ list_of_videos = ["Who'se Really Supporting Russia","The Perfect Hillary Clinton
                   "Patrick Bet David on The Breakfast Club","The Truth About The 2020 Election","Kobe Bryant’s Last Great Interview"]
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 def filter_out_embed(filter_sent,list_of_videos):
+    results = []
     #Compute embedding for both lists
     embedding_filter= model.encode(filter_sent, convert_to_tensor=True)
     for i in list_of_videos:
         embedding_uniq_vid = model.encode(i, convert_to_tensor=True)
         result = util.pytorch_cos_sim(embedding_filter, embedding_uniq_vid)
         print(result,i)
+        results.append(result)
+    return results
 filter_out_embed(filter_sent,list_of_videos)
 """
 #A threshold of 0.19 would be perfect here

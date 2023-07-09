@@ -21,12 +21,5 @@ def filter_out_simple(filter_sent,list_of_videos):
     return results
 test_case_1 = filter_out_simple(filter_sent,list_of_videos)
 assert("Who'se Really Supporting Russia" not in test_case_1)
-"""
-#
- Who'se Really Supporting Russia --- Accurately Removed
-The Perfect Hillary Clinton Analogy
-The Evolution of Alex Jones
-Patrick Bet David on The Breakfast Club
-The Truth About The 2020 Election
-Kobe Bryant’s Last Great Interview
-"""
+
+#def filter_out_substring
