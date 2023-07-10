@@ -179,10 +179,13 @@ def _clean_youtube_df(youtube_df):
     Clean the youtube data frame.
     """
 
-    # convert the video_duration (ISO 8601 duration string) into seconds.
+    # convert the `video_duration` (ISO 8601 duration string) into seconds.
     youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(
         lambda x: convert_isodate_to_seconds(x) if isinstance(x, str) else x
     )
+
+    # remove videos with missing `video_id`
+    youtube_df = youtube_df.dropna(subset=['video_id'], ignore_index=True)
 
     return youtube_df
 
