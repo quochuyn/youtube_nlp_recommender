@@ -180,7 +180,9 @@ def _clean_youtube_df(youtube_df):
     """
 
     # convert the video_duration (ISO 8601 duration string) into seconds.
-    youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(convert_isodate_to_seconds)
+    youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(
+        lambda x: convert_isodate_to_seconds(x) if isinstance(x, str) else x
+    )
 
     return youtube_df
 

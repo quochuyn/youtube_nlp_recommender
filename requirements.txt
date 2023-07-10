@@ -9,3 +9,5 @@ streamlit-authenticator==0.2.2
 sqlalchemy==2.0.17
 streamlit-aggrid==0.3.4.post3
 google-api-python-client==2.91.0
+tomli==2.0.1
+isodate==0.6.1
