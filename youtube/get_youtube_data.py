@@ -9,7 +9,7 @@ import googleapiclient.discovery
 
 # utils
 import tomli
-import utils
+from .youtube_utils import convert_isodate_to_seconds, get_value_from_key
 
 
 
@@ -124,18 +124,18 @@ def search_youtube(
     for video in search_response['items']:
         video_snippet = video['snippet']
         video_values = {
-            'video_id' : video['id']['videoId'],
-            'published_at' : video_snippet['publishedAt'],
-            'channel_id' : video_snippet['channelId'],
-            'title' : video_snippet['title'],
-            'description' : video_snippet['description'],
-            'channel_title' : video_snippet['channelTitle'],
-            'thumbnail_default_url' : video_snippet['thumbnails']['default']['url'],
-            'thumbnail_medium_url' : video_snippet['thumbnails']['medium']['url'],
-            'thumbnail_high_url' : video_snippet['thumbnails']['high']['url'],
+            'video_id' : get_value_from_key(video, ['id', 'videoId']),
+            'published_at' : get_value_from_key(video_snippet, 'publishedAt'),
+            'channel_id' : get_value_from_key(video_snippet, 'channelId'),
+            'title' : get_value_from_key(video_snippet, 'title'),
+            'description' : get_value_from_key(video_snippet, 'description'),
+            'channel_title' : get_value_from_key(video_snippet, 'channelTitle'),
+            'thumbnail_default_url' : get_value_from_key(video_snippet, ['thumbnails', 'default', 'url']),
+            'thumbnail_medium_url' : get_value_from_key(video_snippet, ['thumbnails', 'medium', 'url']),
+            'thumbnail_high_url' : get_value_from_key(video_snippet, ['thumbnails', 'high', 'url']),
         }
         video_list.append(video_values)
-        video_ids.append(video['id']['videoId'])
+        video_ids.append(video_values['video_id'])
 
     # grab list of videos
     # NOTE: We execute 1 call to youtube.videos() by passing the entire list of video ids.
@@ -153,14 +153,14 @@ def search_youtube(
 
         # update video values to include extra info
         extra_video_values = {
-            'thumbnail_standard_url' : video_snippet['thumbnails']['standard']['url'],
-            'thumbnail_maxres_url' : video_snippet['thumbnails']['maxres']['url'],
-            'tags' : video_snippet['tags'] if 'tags' in video_snippet.keys() else '[]',
-            'video_duration' : video_content_details['duration'],
-            'video_caption' : video_content_details['caption'],
-            'video_view_count' : video_statistics['viewCount'],
-            'video_like_count' : video_statistics['likeCount'],
-            'video_comment_count' : video_statistics['commentCount']
+            'thumbnail_standard_url' : get_value_from_key(video_snippet, ['thumbnails', 'standard', 'url']),
+            'thumbnail_maxres_url' : get_value_from_key(video_snippet, ['thumbnails', 'maxres', 'url']),
+            'tags' : get_value_from_key(video_snippet, 'tags'),
+            'video_duration' : get_value_from_key(video_content_details, 'duration'),
+            'video_caption' : get_value_from_key(video_content_details, 'caption'),
+            'video_view_count' : get_value_from_key(video_statistics, 'viewCount'),
+            'video_like_count' : get_value_from_key(video_statistics, 'likeCount'),
+            'video_comment_count' : get_value_from_key(video_statistics, 'commentCount'),
         }
         video_list[index].update(extra_video_values)
 
@@ -180,7 +180,7 @@ def _clean_youtube_df(youtube_df):
     """
 
     # convert the video_duration (ISO 8601 duration string) into seconds.
-    youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(utils.convert_isodate_to_seconds)
+    youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(convert_isodate_to_seconds)
 
     return youtube_df
 
