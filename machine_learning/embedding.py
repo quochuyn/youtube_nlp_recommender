@@ -7,6 +7,8 @@
 
 #Filter Out: Politics
 
+#https://huggingface.co/sentence-transformers
+
 from sentence_transformers import SentenceTransformer, util
 from sklearn.metrics.pairwise import cosine_similarity
 
