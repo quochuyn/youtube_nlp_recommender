@@ -21,16 +21,23 @@ filter_sent = "Politics"
 list_of_videos = ["Who'se Really Supporting Russia","The Perfect Hillary Clinton Analogy","The Evolution of Alex Jones",\
                   "Patrick Bet David on The Breakfast Club","The Truth About The 2020 Election","Kobe Bryant’s Last Great Interview"]
 model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+
+#for this example will return ['Patrick Bet David on The Breakfast Club', 'Kobe Bryant’s Last Great Interview']
 def filter_out_embed(filter_sent,list_of_videos):
+    """
+    Takes in a filter sentence and a list of video string titles and returns
+    video titles that are less than 0.19 cosine similarity
+    """
     results = []
     #Compute embedding for both lists
     embedding_filter= model.encode(filter_sent, convert_to_tensor=True)
     for i in list_of_videos:
         embedding_uniq_vid = model.encode(i, convert_to_tensor=True)
         result = util.pytorch_cos_sim(embedding_filter, embedding_uniq_vid)
-        print(result,i)
-        if result >0.19:
-            results.append(result)
+       # print(result,i)
+        if result.item()<0.19:
+            results.append(i)
+    print(results,"yea")##
     return results
 filter_out_embed(filter_sent,list_of_videos)
 """
