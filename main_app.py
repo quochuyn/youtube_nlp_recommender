@@ -18,9 +18,19 @@ import pandas as pd
 import ast
 from youtube.get_youtube_data import get_youtube_api_key, make_client, search_youtube
 
+YOUTUBE_API_KEY = get_youtube_api_key()
+
+dbcredentials = st.secrets["postgres"]
+
+dbEngine = create_engine('postgresql+psycopg2://' +
+    dbcredentials['user'] + ':' +
+    dbcredentials['password'] + '@' +
+    dbcredentials['host'] + ':' +
+    str(dbcredentials['port']) + '/' +
+    dbcredentials['dbname'])
+
 def init_connection():
     return psycopg2.connect(**st.secrets["postgres"])
-
 
 def app_layout():
     st.set_page_config(layout="wide")
@@ -30,20 +40,23 @@ def app_layout():
 
     st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
 
-def utube_app(username):
+def get_youtube_videos(search_words):
+    print("Calling youtube_api..")
+    youtube_client = make_client(YOUTUBE_API_KEY)
+    youtube_df = search_youtube(
+        youtube_client,
+        query= "'" + search_words[0] + "'",
+        # query='bossa nova',
+        max_vids=session.slider_count,        # youtube accepts 50 as the max value
+        order='relevance'   # default is relevance
+    )
+    return youtube_df
+
+def youtube_app(username):
     conn = init_connection()
     tabs = sidebar()
 
     if tabs == 'Dashboard':
-        dbcredentials = st.secrets["postgres"]
-
-        dbEngine = create_engine('postgresql+psycopg2://' +
-            dbcredentials['user'] + ':' +
-            dbcredentials['password'] + '@' +
-            dbcredentials['host'] + ':' +
-            str(dbcredentials['port']) + '/' +
-            dbcredentials['dbname'])
-
         profile_searchwords = pd.read_sql(sql = text("select search_words " + \
                                     " from user_profile where username = '" + username + "'"), 
                                     con=dbEngine.connect())['search_words'].values[0]
@@ -58,17 +71,6 @@ def utube_app(username):
 
         session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
         st.text("")
-
-        
-        YOUTUBE_API_KEY = get_youtube_api_key()
-        youtube = make_client(YOUTUBE_API_KEY)
-        youtube_df = search_youtube(
-            youtube,
-            #query= "'" + search_words[0] + "'",
-            query='bossa nova',
-            max_vids=session.slider_count,        # youtube accepts 50 as the max value
-            order='relevance'   # default is relevance
-        )
 
         if len(search_words) > 0:
             stored_imgs = select_images(conn, search_words, session.slider_count) # your images here
@@ -91,22 +93,20 @@ def utube_app(username):
                     # Embed a youtube video
                     st_player(url="https://youtu.be/" + video_ids[idx], controls=True)
                 
-        
-        tmp_message = '<p style="font-family:Courier; color:Black; font-size: 20px;">Based on query -> bossa nova to youtube api</p>'
-        st.markdown(tmp_message, unsafe_allow_html=True)
-        cols = cycle(st.columns(4))
-        for idx, row in youtube_df.iterrows():
-            with next(cols):
-                # Embed a youtube video
-                st_player(url="https://youtu.be/" + row['video_id'], controls=True)
+            tmp_message = '<p style="font-family:Courier; color:Black; font-size: 20px;">Based on query -> bossa nova to youtube api</p>'
+            st.markdown(tmp_message, unsafe_allow_html=True)
+            cols = cycle(st.columns(4))
+            youtube_df = get_youtube_videos(search_words)
+            for idx, row in youtube_df.head(session.slider_count).iterrows():
+                with next(cols):
+                    # Embed a youtube video
+                    st_player(url="https://youtu.be/" + row['video_id'], controls=True)
 
     elif tabs == 'Upload':
         topics = ["streamlit", "education"]
         load_images(conn, topics)
     elif tabs == 'Account Setting':
         modify_profile(conn, username)
-    
-
 app_layout()
 
 authenticator = auth_from_db()
@@ -117,7 +117,7 @@ name, authentication_status, username = authenticator.login('Login', 'main')
 if authentication_status:
     authenticator.logout('Logout', 'main', key='unique_key')
     st.write(f'Welcome *{name}*')
-    utube_app(username)
+    youtube_app(username)
 elif authentication_status is False:
     st.error('Username/password is incorrect')
 elif authentication_status is None:

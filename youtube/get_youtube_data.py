@@ -9,7 +9,7 @@ import googleapiclient.discovery
 
 # utils
 import tomli
-from .youtube_utils import convert_isodate_to_seconds
+from .youtube_utils import convert_isodate_to_seconds, get_value_from_key
 
 
 
@@ -109,7 +109,6 @@ def search_youtube(
     assert 0 < max_vids <= 50, f"Value for max_vids ({max_vids}) is not within range of acceptable values."
     assert order in ['date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount'], f"Value for order ({order}) is not one of the acceptable values."
 
-    print("input query ", query)
     # search by query
     search_response = youtube.search().list(
         part='snippet',
@@ -125,18 +124,18 @@ def search_youtube(
     for video in search_response['items']:
         video_snippet = video['snippet']
         video_values = {
-            'video_id' : video['id']['videoId'],
-            'published_at' : video_snippet['publishedAt'],
-            'channel_id' : video_snippet['channelId'],
-            'title' : video_snippet['title'],
-            'description' : video_snippet['description'],
-            'channel_title' : video_snippet['channelTitle'],
-            'thumbnail_default_url' : video_snippet['thumbnails']['default']['url'],
-            'thumbnail_medium_url' : video_snippet['thumbnails']['medium']['url'],
-            'thumbnail_high_url' : video_snippet['thumbnails']['high']['url'],
+            'video_id' : get_value_from_key(video, ['id', 'videoId']),
+            'published_at' : get_value_from_key(video_snippet, 'publishedAt'),
+            'channel_id' : get_value_from_key(video_snippet, 'channelId'),
+            'title' : get_value_from_key(video_snippet, 'title'),
+            'description' : get_value_from_key(video_snippet, 'description'),
+            'channel_title' : get_value_from_key(video_snippet, 'channelTitle'),
+            'thumbnail_default_url' : get_value_from_key(video_snippet, ['thumbnails', 'default', 'url']),
+            'thumbnail_medium_url' : get_value_from_key(video_snippet, ['thumbnails', 'medium', 'url']),
+            'thumbnail_high_url' : get_value_from_key(video_snippet, ['thumbnails', 'high', 'url']),
         }
         video_list.append(video_values)
-        video_ids.append(video['id']['videoId'])
+        video_ids.append(video_values['video_id'])
 
     # grab list of videos
     # NOTE: We execute 1 call to youtube.videos() by passing the entire list of video ids.
@@ -147,29 +146,29 @@ def search_youtube(
     ).execute()
 
     # loop through list of videos
-    # for index, video in enumerate(videos_response['items']):
-    #     video_snippet = video['snippet']
-    #     video_content_details = video['contentDetails']
-    #     video_statistics = video['statistics']
+    for index, video in enumerate(videos_response['items']):
+        video_snippet = video['snippet']
+        video_content_details = video['contentDetails']
+        video_statistics = video['statistics']
 
-    #     # update video values to include extra info
-    #     extra_video_values = {
-    #         'thumbnail_standard_url' : video_snippet['thumbnails']['standard']['url'],
-    #         #'thumbnail_maxres_url' : video_snippet['thumbnails']['maxres']['url'],
-    #         'tags' : video_snippet['tags'] if 'tags' in video_snippet.keys() else '[]',
-    #         'video_duration' : video_content_details['duration'],
-    #         'video_caption' : video_content_details['caption'],
-    #         'video_view_count' : video_statistics['viewCount'],
-    #         'video_like_count' : video_statistics['likeCount'],
-    #         'video_comment_count' : video_statistics['commentCount']
-    #     }
-    #     video_list[index].update(extra_video_values)
+        # update video values to include extra info
+        extra_video_values = {
+            'thumbnail_standard_url' : get_value_from_key(video_snippet, ['thumbnails', 'standard', 'url']),
+            'thumbnail_maxres_url' : get_value_from_key(video_snippet, ['thumbnails', 'maxres', 'url']),
+            'tags' : get_value_from_key(video_snippet, 'tags'),
+            'video_duration' : get_value_from_key(video_content_details, 'duration'),
+            'video_caption' : get_value_from_key(video_content_details, 'caption'),
+            'video_view_count' : get_value_from_key(video_statistics, 'viewCount'),
+            'video_like_count' : get_value_from_key(video_statistics, 'likeCount'),
+            'video_comment_count' : get_value_from_key(video_statistics, 'commentCount'),
+        }
+        video_list[index].update(extra_video_values)
 
     # TODO: get video transcripts if video_caption == True
     
     df = pd.DataFrame(video_list)
 
-    #df = _clean_youtube_df(df)
+    df = _clean_youtube_df(df)
 
     return df
 
@@ -180,8 +179,13 @@ def _clean_youtube_df(youtube_df):
     Clean the youtube data frame.
     """
 
-    # convert the video_duration (ISO 8601 duration string) into seconds.
-    youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(convert_isodate_to_seconds)
+    # convert the `video_duration` (ISO 8601 duration string) into seconds.
+    youtube_df.loc[:,'video_duration'] = youtube_df['video_duration'].apply(
+        lambda x: convert_isodate_to_seconds(x) if isinstance(x, str) else x
+    )
+
+    # remove videos with missing `video_id`
+    youtube_df = youtube_df.dropna(subset=['video_id'], ignore_index=True)
 
     return youtube_df
 
