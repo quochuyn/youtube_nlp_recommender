@@ -18,9 +18,17 @@ import pandas as pd
 import ast
 from youtube.get_youtube_data import get_youtube_api_key, make_client, search_youtube
 
+dbcredentials = st.secrets["postgres"]
+
+dbEngine = create_engine('postgresql+psycopg2://' +
+    dbcredentials['user'] + ':' +
+    dbcredentials['password'] + '@' +
+    dbcredentials['host'] + ':' +
+    str(dbcredentials['port']) + '/' +
+    dbcredentials['dbname'])
+
 def init_connection():
     return psycopg2.connect(**st.secrets["postgres"])
-
 
 def app_layout():
     st.set_page_config(layout="wide")
@@ -35,15 +43,6 @@ def utube_app(username):
     tabs = sidebar()
 
     if tabs == 'Dashboard':
-        dbcredentials = st.secrets["postgres"]
-
-        dbEngine = create_engine('postgresql+psycopg2://' +
-            dbcredentials['user'] + ':' +
-            dbcredentials['password'] + '@' +
-            dbcredentials['host'] + ':' +
-            str(dbcredentials['port']) + '/' +
-            dbcredentials['dbname'])
-
         profile_searchwords = pd.read_sql(sql = text("select search_words " + \
                                     " from user_profile where username = '" + username + "'"), 
                                     con=dbEngine.connect())['search_words'].values[0]
