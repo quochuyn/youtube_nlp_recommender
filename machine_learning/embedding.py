@@ -13,21 +13,19 @@ from sentence_transformers import SentenceTransformer, util
 from sklearn.metrics.pairwise import cosine_similarity
 
 
-#these sentences have no words in common yet they are semantically similar
-#they should have a higher cosine similarity than a noisy pair of sentences
 
-#based on these basic examples, we can start with a min threshold of 0.3
-filter_sent = "Politics"
-list_of_videos = ["Who'se Really Supporting Russia","The Perfect Hillary Clinton Analogy","The Evolution of Alex Jones",\
-                  "Patrick Bet David on The Breakfast Club","The Truth About The 2020 Election","Kobe Bryant’s Last Great Interview"]
-model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
-
-#for this example will return ['Patrick Bet David on The Breakfast Club', 'Kobe Bryant’s Last Great Interview']
-def filter_out_embed(filter_sent,list_of_videos):
-    """
+def filter_out_embed(model, filter_sent : str, list_of_videos : list, threshold : int = 0.19):
+    r"""
     Takes in a filter sentence and a list of video string titles and returns
-    video titles that are less than 0.19 cosine similarity
+    video titles that are less than 0.19 cosine similarity.
+    
+    Parameters
+    ----------
+    model : 
+    filter_sent : str
+        The filter sentence
     """
+
     results = []
     #Compute embedding for both lists
     embedding_filter= model.encode(filter_sent, convert_to_tensor=True)
@@ -35,11 +33,11 @@ def filter_out_embed(filter_sent,list_of_videos):
         embedding_uniq_vid = model.encode(i, convert_to_tensor=True)
         result = util.pytorch_cos_sim(embedding_filter, embedding_uniq_vid)
        # print(result,i)
-        if result.item()<0.19:
+        if result.item()<threshold:
             results.append(i)
-    print(results,"yea")##
+    # print(results,"yea")##
     return results
-filter_out_embed(filter_sent,list_of_videos)
+
 """
 #A threshold of 0.19 would be perfect here
 tensor([[0.2883]]) Who'se Really Supporting Russia --- Should be Politics
@@ -50,21 +48,42 @@ tensor([[0.3055]]) The Truth About The 2020 Election  --- Should be Politics
 tensor([[0.1542]]) Kobe Bryant’s Last Great Interview
 """
 
-import numpy as np
-import pandas as pd
-#import youtube.get_youtube_data as get_youtube_data
-#from youtube_recommender_app.youtube import get_youtube_data
-import youtube.get_youtube_data as get_youtube_data
-YOUTUBE_API_KEY = get_youtube_data.get_youtube_api_key()
-youtube = get_youtube_data.make_client(YOUTUBE_API_KEY)
-youtube_df = get_youtube_data.search_youtube(
-    youtube,
-    query='Patrick Bet David',
-    max_vids=15,        # youtube accepts 50 as the max value
-    order='relevance'   # default is relevance
-)
 
-titles = youtube_df['title'].tolist()
-print("titles:",titles)
-print("api test")
-print(filter_out_embed(filter_sent,titles))
+
+if __name__ == '__main__':
+    import numpy as np
+    import pandas as pd
+
+    import sys
+
+    sys.path.insert(0, r'C:\Users\mrquo\Desktop\School\2023SpringSummer\SIADS699\youtube_recommender_app')
+
+    import youtube.get_youtube_data as get_youtube_data
+
+    #these sentences have no words in common yet they are semantically similar
+    #they should have a higher cosine similarity than a noisy pair of sentences
+
+    #based on these basic examples, we can start with a min threshold of 0.3
+    filter_sent = "Politics"
+    list_of_videos = ["Who'se Really Supporting Russia","The Perfect Hillary Clinton Analogy","The Evolution of Alex Jones",\
+                    "Patrick Bet David on The Breakfast Club","The Truth About The 2020 Election","Kobe Bryant's Last Great Interview"]
+    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+
+    #for this example will return ['Patrick Bet David on The Breakfast Club', 'Kobe Bryant’s Last Great Interview']
+    print(filter_out_embed(model,filter_sent,list_of_videos))
+
+    YOUTUBE_API_KEY = get_youtube_data.get_youtube_api_key()
+    youtube = get_youtube_data.make_client(YOUTUBE_API_KEY)
+    youtube_df = get_youtube_data.search_youtube(
+        youtube,
+        query='Patrick Bet David',
+        max_vids=15,        # youtube accepts 50 as the max value
+        order='relevance'   # default is relevance
+    )
+
+    titles = youtube_df['title'].tolist()
+    print("titles:",titles)
+    print("api test")
+    print(filter_out_embed(model,filter_sent,titles))
+
+    print(type(model))
