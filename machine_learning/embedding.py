@@ -21,9 +21,21 @@ def filter_out_embed(model, filter_sent : str, list_of_videos : list, threshold 
     
     Parameters
     ----------
-    model : 
+    model : sentence_transformers.SentenceTransformer.SentenceTransformer
+        The HuggingFace Senctence Transformer language model to perform
+        encoding of the text.
     filter_sent : str
-        The filter sentence
+        The filter sentence written in natural language to remove from the youtube
+        search query.
+    list_of_videos : list
+        The list of titles to be encoded by the `model`.
+    threshold : int, default=0.19
+        The threshold to filter videos by cosine similarity comparison.
+
+    Returns
+    -------
+    results : list
+        The list of titles left after the filter pass.
     """
 
     results = []
@@ -45,7 +57,7 @@ tensor([[0.1958]]) The Perfect Hillary Clinton Analogy  --- Should be Politics
 tensor([[0.2119]]) The Evolution of Alex Jones  --- Should be Politics
 tensor([[0.0648]]) Patrick Bet David on The Breakfast Club
 tensor([[0.3055]]) The Truth About The 2020 Election  --- Should be Politics
-tensor([[0.1542]]) Kobe Bryant’s Last Great Interview
+tensor([[0.1542]]) Kobe Bryant's Last Great Interview
 """
 
 
@@ -54,9 +66,10 @@ if __name__ == '__main__':
     import numpy as np
     import pandas as pd
 
+    import os
     import sys
 
-    sys.path.insert(0, r'C:\Users\mrquo\Desktop\School\2023SpringSummer\SIADS699\youtube_recommender_app')
+    sys.path.insert(0, os.getcwd())
 
     import youtube.get_youtube_data as get_youtube_data
 
