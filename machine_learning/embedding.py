@@ -49,3 +49,22 @@ tensor([[0.0648]]) Patrick Bet David on The Breakfast Club
 tensor([[0.3055]]) The Truth About The 2020 Election  --- Should be Politics
 tensor([[0.1542]]) Kobe Bryant’s Last Great Interview
 """
+
+import numpy as np
+import pandas as pd
+#import youtube.get_youtube_data as get_youtube_data
+#from youtube_recommender_app.youtube import get_youtube_data
+import youtube.get_youtube_data as get_youtube_data
+YOUTUBE_API_KEY = get_youtube_data.get_youtube_api_key()
+youtube = get_youtube_data.make_client(YOUTUBE_API_KEY)
+youtube_df = get_youtube_data.search_youtube(
+    youtube,
+    query='Patrick Bet David',
+    max_vids=15,        # youtube accepts 50 as the max value
+    order='relevance'   # default is relevance
+)
+
+titles = youtube_df['title'].tolist()
+print("titles:",titles)
+print("api test")
+print(filter_out_embed(filter_sent,titles))
