@@ -16,9 +16,14 @@ from user_profile import modify_profile
 from sqlalchemy import create_engine, text
 import pandas as pd
 import ast
-from youtube.get_youtube_data import get_youtube_api_key, make_client, search_youtube
+import youtube.get_youtube_data as get_youtube_data
 
-YOUTUBE_API_KEY = get_youtube_api_key()
+YOUTUBE_API_KEY = get_youtube_data.get_youtube_api_key()
+MAX_VIDS = 15
+
+if 'search_words' not in st.session_state:
+    st.session_state.search_words = None
+    st.session_state.youtube_df = pd.DataFrame()
 
 dbcredentials = st.secrets["postgres"]
 
@@ -40,14 +45,13 @@ def app_layout():
 
     st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
 
-def get_youtube_videos(search_words):
+def get_youtube_videos(input_query):
     print("Calling youtube_api..")
-    youtube_client = make_client(YOUTUBE_API_KEY)
-    youtube_df = search_youtube(
+    youtube_client = get_youtube_data.make_client(YOUTUBE_API_KEY)
+    youtube_df = get_youtube_data.search_youtube(
         youtube_client,
-        query= "'" + search_words[0] + "'",
-        # query='bossa nova',
-        max_vids=session.slider_count,        # youtube accepts 50 as the max value
+        query= input_query,
+        max_vids=MAX_VIDS,        # youtube accepts 50 as the max value
         order='relevance'   # default is relevance
     )
     return youtube_df
@@ -62,42 +66,25 @@ def youtube_app(username):
                                     con=dbEngine.connect())['search_words'].values[0]
         print("profile searchwords ", profile_searchwords, type(profile_searchwords))
 
-        all_words = st.text_input("Enter Search Words(seperated by comma if multiple)", value = ','.join(profile_searchwords))
+        input_query = st.text_input("Enter Query", value = ','.join(profile_searchwords))
 
-        search_words = all_words.split(',')
-        print(search_words)
-        search_words = [x.strip() for x in search_words if x]
-        print("search_words", search_words)
+        # search_words = all_words.split(',')
+        # print(search_words)
+        # search_words = [x.strip() for x in search_words if x]
+        # print("search_words", search_words)
 
         session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
         st.text("")
 
-        if len(search_words) > 0:
-            stored_imgs = select_images(conn, search_words, session.slider_count) # your images here
-            converted_imgs = []
-            video_ids = []
-            for img in stored_imgs:
-                #pyscopg2 returns tuple, extract first key, which is memoryview for the image
-                mview = img[0]
-                #print(type(mview))
-                #print(img[1])
-                video_ids.append(img[1])
-                converted_imgs.append(BytesIO(base64.b64decode(mview)))
+        if len(input_query) > 0:
+            cols = cycle(st.columns(4))
 
-            print("total imgs", len(converted_imgs))
-            caption = [] # your caption here
-            cols = cycle(st.columns(4))
-            for idx, converted_img in enumerate(converted_imgs):
-                #next(cols).image(converted_img, width=150, caption=video_ids[idx])
-                with next(cols):
-                    # Embed a youtube video
-                    st_player(url="https://youtu.be/" + video_ids[idx], controls=True)
-                
-            tmp_message = '<p style="font-family:Courier; color:Black; font-size: 20px;">Based on query -> bossa nova to youtube api</p>'
-            st.markdown(tmp_message, unsafe_allow_html=True)
-            cols = cycle(st.columns(4))
-            youtube_df = get_youtube_videos(search_words)
-            for idx, row in youtube_df.head(session.slider_count).iterrows():
+            # no need to call api if results are alearedy fetched for the search words
+            if st.session_state.search_words != input_query:
+                st.session_state.search_words = input_query
+                st.session_state.youtube_df = get_youtube_videos(input_query)
+
+            for idx, row in st.session_state.youtube_df.head(session.slider_count).iterrows():
                 with next(cols):
                     # Embed a youtube video
                     st_player(url="https://youtu.be/" + row['video_id'], controls=True)
