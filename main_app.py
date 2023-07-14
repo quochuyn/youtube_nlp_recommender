@@ -78,7 +78,7 @@ def youtube_app(username):
         st.text("")
 
         if len(input_query) > 0:
-            cols = cycle(st.columns(4))
+            cols = cycle(st.columns(3))
 
             # no need to call api if results are alearedy fetched for the search words
             if st.session_state.search_words != input_query:
