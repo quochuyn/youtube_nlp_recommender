@@ -1,5 +1,7 @@
 #!/usr/local/bin/python
-
+r"""
+Streamlit app to integrate front end with youtube api and ML model to recommend videos based on input query and filter criteria.
+"""
 import streamlit as st
 import psycopg2
 # from dataservice.query import run_query
@@ -67,11 +69,6 @@ def youtube_app(username):
         print("profile searchwords ", profile_searchwords, type(profile_searchwords))
 
         input_query = st.text_input("Enter Query", value = ','.join(profile_searchwords))
-
-        # search_words = all_words.split(',')
-        # print(search_words)
-        # search_words = [x.strip() for x in search_words if x]
-        # print("search_words", search_words)
 
         session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
         st.text("")
