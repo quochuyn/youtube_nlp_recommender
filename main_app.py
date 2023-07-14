@@ -1,24 +1,23 @@
 #!/usr/local/bin/python
-r"""
-Streamlit app to integrate front end with youtube api and ML model to recommend videos based on input query and filter criteria.
-"""
 import streamlit as st
 import psycopg2
-# from dataservice.query import run_query
 from components.sidebar import sidebar
 from dataservice.thumbnail_images import load_images, fetch_images, select_images
 from streamlit import session_state as session
 from io import BytesIO
 from itertools import cycle
-import base64
 from streamlit_player import st_player
 from st_click_detector import click_detector
 from auth_app import auth_from_db, auth_from_yaml
 from user_profile import modify_profile
 from sqlalchemy import create_engine, text
 import pandas as pd
-import ast
 import youtube.get_youtube_data as get_youtube_data
+
+
+"""
+Streamlit app to integrate front end with youtube api and ML model to recommend videos based on input query and filter criteria.
+"""
 
 YOUTUBE_API_KEY = get_youtube_data.get_youtube_api_key()
 MAX_VIDS = 15
@@ -95,8 +94,6 @@ app_layout()
 
 authenticator = auth_from_db()
 name, authentication_status, username = authenticator.login('Login', 'main')
-
-#print("name ", name, "auth ", authentication_status, "username ", username)
 
 if authentication_status:
     authenticator.logout('Logout', 'main', key='unique_key')
