@@ -94,7 +94,7 @@ def youtube_app(username):
                     with next(cols):
                         # Embed a youtube video
                         st_player(url="https://youtu.be/" + row['video_id'], controls=True)
-                        video_title = "<b style='max-width: 400px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; \
+                        video_title = "<b style='max-width: 500px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; \
                                         font-family: serif; text-align: center; color: black;'>" + row['title'] + "</b>"
                         st.markdown(video_title, unsafe_allow_html=True)
             else:
@@ -103,7 +103,7 @@ def youtube_app(username):
                         # Embed a youtube video
                         st_player(url="https://youtu.be/" + row['video_id'], controls=True)
                         #st.caption(row['title'])
-                        video_title = "<b style='max-width: 400px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; \
+                        video_title = "<b style='max-width: 500px; display: inline-block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; \
                                         font-family: serif; text-align: center; color: black;'>" + row['title'] + "</b>"
                         st.markdown(video_title, unsafe_allow_html=True)
 
