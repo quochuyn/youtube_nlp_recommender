@@ -9,6 +9,11 @@ from os import listdir
 import base64
 from io import BytesIO
 
+
+"""
+Sample image upload to test application
+"""
+
 def load_images(conn, topics):
     file_path = "./sample_images/"
     file_list = [f for f in listdir(file_path) if isfile(join(file_path, f))]

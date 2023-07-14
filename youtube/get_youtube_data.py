@@ -109,6 +109,7 @@ def search_youtube(
     assert 0 < max_vids <= 50, f"Value for max_vids ({max_vids}) is not within range of acceptable values."
     assert order in ['date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount'], f"Value for order ({order}) is not one of the acceptable values."
 
+    print("searching for ", query)
     # search by query
     search_response = youtube.search().list(
         part='snippet',
