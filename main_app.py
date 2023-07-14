@@ -12,7 +12,8 @@ from user_profile import modify_profile
 from sqlalchemy import create_engine, text
 import pandas as pd
 import youtube.get_youtube_data as get_youtube_data
-
+from sentence_transformers import SentenceTransformer
+import machine_learning.embedding as embedding
 
 YOUTUBE_API_KEY = get_youtube_data.get_youtube_api_key()
 MAX_VIDS = 15
@@ -20,6 +21,7 @@ MAX_VIDS = 15
 if 'search_words' not in st.session_state:
     st.session_state.search_words = None
     st.session_state.youtube_df = pd.DataFrame()
+    st.session_state.filter_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 dbcredentials = st.secrets["postgres"]
 
@@ -69,6 +71,9 @@ def youtube_app(username):
         input_query = st.text_input("Enter Query", value = ','.join(profile_searchwords))
         input_filter = st.text_input("Enter Filters", value = ','.join(profile_filtered_words))
 
+        print("input_query ", input_query, type(input_query))
+        print("input_filter ", input_filter, type(input_filter))
+
         session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
         st.text("")
 
@@ -80,10 +85,20 @@ def youtube_app(username):
                 st.session_state.search_words = input_query
                 st.session_state.youtube_df = get_youtube_videos(input_query)
 
-            for idx, row in st.session_state.youtube_df.head(session.slider_count).iterrows():
-                with next(cols):
-                    # Embed a youtube video
-                    st_player(url="https://youtu.be/" + row['video_id'], controls=True)
+            if len(input_filter) > 0:
+                titles = st.session_state.youtube_df['title'].values
+                #print("Titles ", titles, type(titles))
+                filtered_titles = embedding.filter_out_embed(st.session_state.filter_model, input_filter, titles)
+                filtered_df = st.session_state.youtube_df[st.session_state.youtube_df['title'].isin(filtered_titles)]
+                for idx, row in filtered_df.head(session.slider_count).iterrows():
+                    with next(cols):
+                        # Embed a youtube video
+                        st_player(url="https://youtu.be/" + row['video_id'], controls=True)
+            else:
+                for idx, row in st.session_state.youtube_df.head(session.slider_count).iterrows():
+                    with next(cols):
+                        # Embed a youtube video
+                        st_player(url="https://youtu.be/" + row['video_id'], controls=True)
 
     elif tabs == 'Upload':
         topics = ["streamlit", "education"]
