@@ -4,7 +4,6 @@ import psycopg2
 from components.sidebar import sidebar
 from dataservice.thumbnail_images import load_images, fetch_images, select_images
 from streamlit import session_state as session
-from io import BytesIO
 from itertools import cycle
 from streamlit_player import st_player
 from st_click_detector import click_detector
@@ -14,10 +13,6 @@ from sqlalchemy import create_engine, text
 import pandas as pd
 import youtube.get_youtube_data as get_youtube_data
 
-
-"""
-Streamlit app to integrate front end with youtube api and ML model to recommend videos based on input query and filter criteria.
-"""
 
 YOUTUBE_API_KEY = get_youtube_data.get_youtube_api_key()
 MAX_VIDS = 15
@@ -40,7 +35,6 @@ def init_connection():
 
 def app_layout():
     st.set_page_config(layout="wide")
-
     app_header = "<h1 style='text-align: center; color: black;'>Youtube Recommendation App</h1>"
     st.markdown(app_header, unsafe_allow_html=True)
 
@@ -62,12 +56,18 @@ def youtube_app(username):
     tabs = sidebar()
 
     if tabs == 'Dashboard':
-        profile_searchwords = pd.read_sql(sql = text("select search_words " + \
+        profile_df = pd.read_sql(sql = text("select search_words, filtered_words " + \
                                     " from user_profile where username = '" + username + "'"), 
-                                    con=dbEngine.connect())['search_words'].values[0]
+                                    con=dbEngine.connect())
+
+        profile_searchwords = profile_df['search_words'].values[0]
+        profile_filtered_words = profile_df['filtered_words'].values[0]
+
         print("profile searchwords ", profile_searchwords, type(profile_searchwords))
+        print("profile filtered_words ", profile_filtered_words, type(profile_filtered_words))
 
         input_query = st.text_input("Enter Query", value = ','.join(profile_searchwords))
+        input_filter = st.text_input("Enter Filters", value = ','.join(profile_filtered_words))
 
         session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
         st.text("")
