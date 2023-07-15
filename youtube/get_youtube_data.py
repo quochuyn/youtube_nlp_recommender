@@ -141,6 +141,7 @@ def search_youtube(
                 q=query,
                 maxResults=num_results,
                 order=order,
+                type='video',           # restrict to videos only (instead of also channels and playlists)
                 relevanceLanguage='en', # english only
             ).execute()
         else:
@@ -151,6 +152,7 @@ def search_youtube(
                 pageToken=next_page_token,
                 maxResults=num_results,
                 order=order,
+                type='video',           # restrict to videos only (instead of also channels and playlists)
                 relevanceLanguage='en', # english only
             ).execute()
 
