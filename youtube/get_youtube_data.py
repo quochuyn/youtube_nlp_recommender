@@ -232,3 +232,64 @@ def _clean_youtube_df(youtube_df):
     return youtube_df
 
 
+
+def get_videos_data(
+        youtube : googleapiclient.discovery.Resource,
+        id : Union[str,list[str]],
+    ) -> pd.DataFrame:
+    r"""
+    Perform a Youtube `videos` method call on the Youtube video ID(s). A call
+    to this method has a quota cost of 1 unit.
+
+    Parameters
+    ----------
+    youtube : googleapiclient.discovery.Resource
+        The Youtube API client which calls methods for requesting API content.
+    id : Union[str,list[str]]
+        A string or list of strings of the Youtube video ID(s).
+    
+    Returns
+    -------
+    df : pd.DataFrame
+        The pandas DataFrame of video data returned by `videos`.
+    """
+
+    videos_response = youtube.videos().list(
+        part=['snippet', 'contentDetails', 'statistics'],
+        id=id,
+    ).execute()
+
+    # loop through list of videos
+    video_list = [] # list for each row
+    for index, video in enumerate(videos_response['items']):
+        video_snippet = video['snippet']
+        video_content_details = video['contentDetails']
+        video_statistics = video['statistics']
+
+        # update video values to include extra info
+        video_values = {
+            'video_id' : get_value_from_key(video, 'id'),
+            'published_at' : get_value_from_key(video_snippet, 'publishedAt'),
+            'channel_id' : get_value_from_key(video_snippet, 'channelId'),
+            'title' : get_value_from_key(video_snippet, 'title'),
+            'description' : get_value_from_key(video_snippet, 'description'),
+            'channel_title' : get_value_from_key(video_snippet, 'channelTitle'),
+            'thumbnail_default_url' : get_value_from_key(video_snippet, ['thumbnails', 'default', 'url']),
+            'thumbnail_medium_url' : get_value_from_key(video_snippet, ['thumbnails', 'medium', 'url']),
+            'thumbnail_high_url' : get_value_from_key(video_snippet, ['thumbnails', 'high', 'url']),
+            'thumbnail_standard_url' : get_value_from_key(video_snippet, ['thumbnails', 'standard', 'url']),
+            'thumbnail_maxres_url' : get_value_from_key(video_snippet, ['thumbnails', 'maxres', 'url']),
+            'tags' : get_value_from_key(video_snippet, 'tags'),
+            'video_duration' : get_value_from_key(video_content_details, 'duration'),
+            'video_caption' : get_value_from_key(video_content_details, 'caption'),
+            'video_view_count' : get_value_from_key(video_statistics, 'viewCount'),
+            'video_like_count' : get_value_from_key(video_statistics, 'likeCount'),
+            'video_comment_count' : get_value_from_key(video_statistics, 'commentCount'),
+        }
+        video_list.append(video_values)
+
+    df = pd.DataFrame(video_list)
+
+    return df
+
+
