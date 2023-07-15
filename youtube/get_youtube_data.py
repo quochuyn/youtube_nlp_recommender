@@ -93,6 +93,8 @@ def search_youtube(
     only return 50 results at a single time. Thus, a call to this method
     has a quota cost of (100 + 1) * ceil(`max_vids` / 50) units. The 100
     and 1 costs refer to the `search` and `videos` methods, respectively.
+    (e.g., max_vids==40 -> (100 + 1) * ceil(40 / 50) = 101 units
+           max_vids==80 -> (100 + 1) * ceil(80 / 50) = 202 units)
 
     Parameters
     ----------
