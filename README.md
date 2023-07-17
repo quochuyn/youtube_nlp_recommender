@@ -2,7 +2,8 @@
 
 Edit `main.py` to customize this app to your heart's desire. :heart:
 
-Installation Instructions 
+Installation Instructions
+  0. If you don't have Docker: You can get Docker Desktop here https://docs.docker.com/compose/install/index.html
   1. cd docker
   2. docker-compose build
   3. docker-compose up -d
