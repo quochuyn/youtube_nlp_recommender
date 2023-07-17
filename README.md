@@ -10,3 +10,7 @@ Installation Instructions
   4. docker exec -ti app /bin/bash
   5. cd /app/youtube_recommender_app
   6. ./run_app.sh
+
+This streamlit site was setup under the Streamlit Cloud read here for more context: https://blog.streamlit.io/host-your-streamlit-app-for-free/
+
+
