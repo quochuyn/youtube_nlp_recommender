@@ -11,6 +11,7 @@ import googleapiclient.discovery
 import tomli
 from typing import Union
 from .youtube_utils import convert_isodate_to_seconds, get_value_from_key
+from .transcripts import get_video_transcript, get_video_transcripts
 
 
 
@@ -84,6 +85,7 @@ def search_youtube(
         query : str,
         max_vids : int = 50,
         order : str = 'relevance',
+        transcripts : bool = False,
         trace : bool = True,
     ) -> pd.DataFrame:
 
@@ -107,6 +109,8 @@ def search_youtube(
     order : str, default='relevance'
         The metric to order the search results. Acceptable values are
         ['date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount'].
+    transcripts : bool, default=False
+        Boolean value whether to grab the video transcripts (if available).
     trace : bool, default=True
         Boolean value whether to trace the output.
         
@@ -205,11 +209,13 @@ def search_youtube(
         next_page_token = search_response['nextPageToken']
         num_vids_searched += num_results
 
-    # TODO: get video transcripts if video_caption == True
-
     df = pd.DataFrame(video_list)
 
     df = _clean_youtube_df(df)
+
+    # getting transcripts takes a while
+    if transcripts:
+        df.loc[:,'transcript'] = df['video_id'].apply(get_video_transcript)
 
     if trace:
         print(f"Returning {df.shape[0]} results")
@@ -237,7 +243,7 @@ def _clean_youtube_df(youtube_df):
 
 def get_videos_data(
         youtube : googleapiclient.discovery.Resource,
-        id : Union[str,list[str]],
+        video_id : Union[str,list[str]],
     ) -> pd.DataFrame:
     r"""
     Perform a Youtube `videos` method call on the Youtube video ID(s). A call
@@ -247,7 +253,7 @@ def get_videos_data(
     ----------
     youtube : googleapiclient.discovery.Resource
         The Youtube API client which calls methods for requesting API content.
-    id : Union[str,list[str]]
+    video_id : Union[str,list[str]]
         A string or list of strings of the Youtube video ID(s).
     
     Returns
@@ -258,7 +264,7 @@ def get_videos_data(
 
     videos_response = youtube.videos().list(
         part=['snippet', 'contentDetails', 'statistics'],
-        id=id,
+        id=video_id,
     ).execute()
 
     # loop through list of videos
