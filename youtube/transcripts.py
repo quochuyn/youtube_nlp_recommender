@@ -75,8 +75,7 @@ def _clean_transcript(transcript : str) -> str:
     transcript = unicodedata.normalize('NFKD', transcript)
 
     # remove any unwanted characters, such as annotations and special symbols
-    transcript = re.sub(pattern=r'\[.+\]', repl='', string=transcript)
-    transcript = re.sub(pattern=r'', repl='', string=transcript)
+    transcript = re.sub(pattern=r'\[\w+\]', repl='', string=transcript)
 
     # remove extra whitespaces
     transcript = re.sub(r'\s+', ' ', transcript)
