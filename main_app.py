@@ -15,7 +15,7 @@ import youtube.get_youtube_data as get_youtube_data
 from sentence_transformers import SentenceTransformer
 import machine_learning.embedding as embedding
 
-YOUTUBE_API_KEY = get_youtube_data.get_youtube_api_key()
+YOUTUBE_API_KEY = st.secrets["api"]["key1"]
 MAX_VIDS = 15
 
 if 'search_words' not in st.session_state:

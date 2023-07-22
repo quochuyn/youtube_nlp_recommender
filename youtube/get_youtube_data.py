@@ -16,38 +16,38 @@ from .transcripts import get_video_transcript, get_video_transcripts
 
 
 
-def get_youtube_api_key() -> str:
-    r"""
-    Returns
-    -------
-    api_key : str
-        The Youtube API key created in Google Cloud by following the instructions on
-        the API overview page: https://developers.google.com/youtube/v3/getting-started
-    """
+# def get_youtube_api_key() -> str:
+#     r"""
+#     Returns
+#     -------
+#     api_key : str
+#         The Youtube API key created in Google Cloud by following the instructions on
+#         the API overview page: https://developers.google.com/youtube/v3/getting-started
+#     """
 
 
-    with open('./youtube/secrets.toml', 'rb') as read_file:
-        secrets = tomli.load(read_file)
+#     with open('./youtube/secrets.toml', 'rb') as read_file:
+#         secrets = tomli.load(read_file)
     
-    return secrets['api']['key1']
+#     return secrets['api']['key1']
 
 
 
-def get_youtube_api_key_list() -> list[str]:
-    r"""
-    Returns
-    -------
-    api_key_list : list[str]
-        A list of Youtube API keys to be cycled through to not hit 10,000 credit daily 
-        quota. Instructions for creating a key in Google Cloud can be found on the API
-        overview page: https://developers.google.com/youtube/v3/getting-started
-    """
+# def get_youtube_api_key_list() -> list[str]:
+#     r"""
+#     Returns
+#     -------
+#     api_key_list : list[str]
+#         A list of Youtube API keys to be cycled through to not hit 10,000 credit daily 
+#         quota. Instructions for creating a key in Google Cloud can be found on the API
+#         overview page: https://developers.google.com/youtube/v3/getting-started
+#     """
 
-    with open('./youtube/secrets.toml', 'rb') as read_file:
-        secrets = tomli.load(read_file)
+#     with open('./youtube/secrets.toml', 'rb') as read_file:
+#         secrets = tomli.load(read_file)
     
-    # return only key values
-    return [v for k,v in secrets['api'].items() if 'key' in k.lower()]
+#     # return only key values
+#     return [v for k,v in secrets['api'].items() if 'key' in k.lower()]
 
 
 
