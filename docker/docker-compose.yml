@@ -9,6 +9,7 @@ services:
       - "8501:8501"
     volumes:
       - ./images:/images
+      - /Users/kchawla/OneDrive/MADS/Term4_Capstone_siads699/team_project/credentials:/credentials
   db:
    image: postgres:12
    container_name: pgdb
