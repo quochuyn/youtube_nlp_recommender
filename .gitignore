@@ -164,4 +164,7 @@ cython_debug/
 
 # the following files will be copied from docker mount volume for local run or will be in streamlit settings page for cloud run
 .streamlit/secrets.toml
-./youtube/secrets.toml
+youtube/secrets.toml
+
+# git push file will also come from docker volume
+git_push.sh
