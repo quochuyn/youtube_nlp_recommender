@@ -224,13 +224,16 @@ def _clean_youtube_df(youtube_df):
         lambda x: (x == 'true') if x is not np.NaN else False
     )
 
-    # define `is_comments_enabled` and `is_live_content`
+    # define `is_comments_enabled`, `is_live_content`, and `NoCommentsBinary`
     youtube_df.loc[:,'is_comments_enabled'] = youtube_df['video_comment_count'].apply(
         lambda x: (int(x) > 0) if x is not np.NaN else False
     )
     youtube_df.loc[:,'is_live_content'] = youtube_df['live_broadcast_content'].apply(
         # `live_broadcast_content` takes on only 3 values: 'live', 'upcoming', or 'none'
         lambda x: True if x in ['live', 'upcoming'] else False
+    )
+    youtube_df.loc[:,'NoCommentsBinary'] = youtube_df['is_comments_enabled'].apply(
+        lambda x: ((not x) * 1) if x is not np.NaN else x
     )
 
     # fix dtypes
