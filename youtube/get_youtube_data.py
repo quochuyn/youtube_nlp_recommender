@@ -65,18 +65,26 @@ def search_youtube(
         query : str,
         max_vids : int = 50,
         order : str = 'relevance',
+        comments : bool = False,
+        max_comments : int = 20,
         transcripts : bool = False,
         trace : bool = True,
     ) -> pd.DataFrame:
 
     r"""
     Perform a Youtube `search` on a string query. The quota cost of this 
-    method depends on the `max_vids` parameter. Each Youtube search call
-    only return 50 results at a single time. Thus, a call to this method
-    has a quota cost of (100 + 1) * ceil(`max_vids` / 50) units. The 100
-    and 1 costs refer to the `search` and `videos` methods, respectively.
-    (e.g., max_vids==40 -> (100 + 1) * ceil(40 / 50) = 101 units
-           max_vids==80 -> (100 + 1) * ceil(80 / 50) = 202 units)
+    method depends on the `max_vids` and `comments` parameters. 
+    
+    Each Youtube search call only return 50 results at a single time. Thus, a call 
+    to this method has a quota cost of (100 + 1) * ceil(`max_vids` / 50) units. 
+    The 100 and 1 costs refer to the `search` and `videos` methods, respectively.
+    (e.g., max_vids==40 && comments==False -> (100 + 1) * ceil(40 / 50) = 101 units
+           max_vids==80 && comments==False -> (100 + 1) * ceil(80 / 50) = 202 units)
+
+    If `comments`==True, then we incur an additional quota cost equal to the number
+    of videos being pulled.
+    (e.g., max_vids==40 && comments==True -> 101 + 40 = 141 units
+           max_vids==80 && comments==True -> 202 + 80 = 282 units)
 
     Parameters
     ----------
@@ -89,6 +97,11 @@ def search_youtube(
     order : str, default='relevance'
         The metric to order the search results. Acceptable values are
         ['date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount'].
+    comments : bool, default=False
+        Boolean value whether to grab the video comments (if available).
+    max_comments : int, default=100
+        The max number of comments to return from each video. Requires
+        `comments`==True.
     transcripts : bool, default=False
         Boolean value whether to grab the video transcripts (if available).
     trace : bool, default=True
@@ -157,6 +170,24 @@ def search_youtube(
                 'thumbnail_medium_url' : get_value_from_key(video_snippet, ['thumbnails', 'medium', 'url']),
                 'thumbnail_high_url' : get_value_from_key(video_snippet, ['thumbnails', 'high', 'url']),
             }
+
+            if comments == True:
+                # TODO: Handle grabbing more than 100 comments
+                comments_response = youtube.commentThreads().list(
+                    part='snippet',
+                    videoId=video_values['video_id'],
+                    maxResults=max_comments, # grab at most 100 to reduce quota usage
+                    order='relevance',       # default is 'time'
+                ).execute()
+
+                comments_list = []
+                for comment in comments_response['items']:
+                    comment_text = get_value_from_key(comment, ['snippet', 'topLevelComment', 'snippet', 'textOriginal'])
+                    if comment_text is not np.NaN:
+                        comments_list.append(comment_text)
+                
+                video_values['comments'] = comments_list
+
             video_list.append(video_values)
             video_ids.append(video_values['video_id'])
 
@@ -196,7 +227,7 @@ def search_youtube(
     df = _clean_youtube_df(df)
 
     # getting transcripts takes a while
-    if transcripts:
+    if transcripts == True:
         df.loc[:,'transcript'] = df['video_id'].apply(get_video_transcript)
 
     if trace:
@@ -206,7 +237,7 @@ def search_youtube(
 
 
 
-def _clean_youtube_df(youtube_df):
+def _clean_youtube_df(youtube_df : pd.DataFrame) -> pd.DataFrame:
     r"""
     Clean the Youtube data frame.
     """
