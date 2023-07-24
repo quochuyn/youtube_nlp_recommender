@@ -152,6 +152,7 @@ def search_youtube(
                 'title' : get_value_from_key(video_snippet, 'title'),
                 'description' : get_value_from_key(video_snippet, 'description'),
                 'channel_title' : get_value_from_key(video_snippet, 'channelTitle'),
+                'live_broadcast_content' : get_value_from_key(video_snippet, 'liveBroadcastContent'),
                 'thumbnail_default_url' : get_value_from_key(video_snippet, ['thumbnails', 'default', 'url']),
                 'thumbnail_medium_url' : get_value_from_key(video_snippet, ['thumbnails', 'medium', 'url']),
                 'thumbnail_high_url' : get_value_from_key(video_snippet, ['thumbnails', 'high', 'url']),
@@ -178,6 +179,7 @@ def search_youtube(
                 'thumbnail_standard_url' : get_value_from_key(video_snippet, ['thumbnails', 'standard', 'url']),
                 'thumbnail_maxres_url' : get_value_from_key(video_snippet, ['thumbnails', 'maxres', 'url']),
                 'tags' : get_value_from_key(video_snippet, 'tags'),
+                'video_category_id' : get_value_from_key(video_snippet, 'categoryId'),
                 'video_duration' : get_value_from_key(video_content_details, 'duration'),
                 'video_caption' : get_value_from_key(video_content_details, 'caption'),
                 'video_view_count' : get_value_from_key(video_statistics, 'viewCount'),
@@ -216,6 +218,29 @@ def _clean_youtube_df(youtube_df):
 
     # remove videos with missing `video_id`
     youtube_df = youtube_df.dropna(subset=['video_id'], ignore_index=True)
+
+    # fix `video_caption` into actual boolean type
+    youtube_df.loc[:,'video_caption'] = youtube_df['video_caption'].apply(
+        lambda x: (x == 'true') if x is not np.NaN else False
+    )
+
+    # define `is_comments_enabled` and `is_live_content`
+    youtube_df.loc[:,'is_comments_enabled'] = youtube_df['video_comment_count'].apply(
+        lambda x: (int(x) > 0) if x is not np.NaN else False
+    )
+    youtube_df.loc[:,'is_live_content'] = youtube_df['live_broadcast_content'].apply(
+        # `live_broadcast_content` takes on only 3 values: 'live', 'upcoming', or 'none'
+        lambda x: True if x in ['live', 'upcoming'] else False
+    )
+
+    # fix dtypes
+    youtube_df = youtube_df.astype({
+        'video_caption' : 'bool',
+        'video_duration' : float,
+        'video_view_count' : float,
+        'video_like_count' : float,
+        'video_comment_count' : float,
+    })
 
     return youtube_df
 
