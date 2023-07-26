@@ -52,12 +52,18 @@ def filter_out_embed(model, filter_sent : str, list_of_videos : list, threshold 
 
 """
 #A threshold of 0.19 would be perfect here
-tensor([[0.2883]]) Who'se Really Supporting Russia --- Should be Politics
-tensor([[0.1958]]) The Perfect Hillary Clinton Analogy  --- Should be Politics
-tensor([[0.2119]]) The Evolution of Alex Jones  --- Should be Politics
-tensor([[0.0648]]) Patrick Bet David on The Breakfast Club
+
+Are the following similar to "politics"
+
+Cosine Similarity ----- Title to Compare to --- Label
+
 tensor([[0.3055]]) The Truth About The 2020 Election  --- Should be Politics
+tensor([[0.2883]]) Who'se Really Supporting Russia --- Should be Politics
+tensor([[0.2119]]) The Evolution of Alex Jones  --- Should be Politics
+tensor([[0.1958]]) The Perfect Hillary Clinton Analogy  --- Should be Politics
 tensor([[0.1542]]) Kobe Bryant's Last Great Interview
+tensor([[0.0648]]) Patrick Bet David on The Breakfast Club
+
 """
 
 
