@@ -1,6 +1,6 @@
 # Welcome to Youtube Recommender App!
 
-Edit `main.py` to customize this app to your heart's desire. :heart:
+Edit `main_app.py` to customize this app to your heart's desire. :heart:
 
 Installation Instructions - Local Run
 
