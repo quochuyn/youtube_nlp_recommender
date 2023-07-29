@@ -40,16 +40,16 @@ def _smooth_if_0(row):
 
 
 def make_pred(
-        model : sklearn.ensemble.RandomForestClassifier = None, 
-        pred_df : pd.DataFrame = None, 
+        model : sklearn.ensemble.RandomForestClassifier, 
+        pred_df : pd.DataFrame, 
         verbose : bool = True,
     ) -> np.ndarray:
     r"""
     Parameters
     ----------
-    model : sklearn.ensemble.RandomForestClassifier, default=None
+    model : sklearn.ensemble.RandomForestClassifier
         The trained Random Forest Classifier model from the Save the Dislikes capstone.
-    pred_df : pd.DataFrame, default=None
+    pred_df : pd.DataFrame
         The Youtube DataFrame of video data returned by youtube.get_youtube_data.search_youtube().
     verbose : bool, default=True
         Boolean value that controls the verbosity, the messages displayed.
@@ -106,16 +106,16 @@ def make_pred(
 
 
 def sort_by_sentiment(
-        model : sklearn.ensemble.RandomForestClassifier = None, 
-        pred_df : pd.DataFrame = None, 
+        model : sklearn.ensemble.RandomForestClassifier, 
+        pred_df : pd.DataFrame, 
         verbose : bool = True,
     ) -> pd.DataFrame:
     r"""
     Parameters
     ----------
-    model : sklearn.ensemble.RandomForestClassifier, default=None
+    model : sklearn.ensemble.RandomForestClassifier
         The trained Random Forest Classifier model from the Save the Dislikes capstone.
-    pred_df : pd.DataFrame, default=None
+    pred_df : pd.DataFrame
         The Youtube DataFrame of video data returned by youtube.get_youtube_data.search_youtube().
     verbose : bool, default=True
         Boolean value that controls the verbosity, the messages displayed.
@@ -137,16 +137,16 @@ def sort_by_sentiment(
 
 
 def filter_out_sentiment(
-        model : sklearn.ensemble.RandomForestClassifier = None, 
-        pred_df : pd.DataFrame = None, 
+        model : sklearn.ensemble.RandomForestClassifier, 
+        pred_df : pd.DataFrame, 
         verbose : bool = True,
     ) -> pd.DataFrame:
     r"""
     Parameters
     ----------
-    model : sklearn.ensemble.RandomForestClassifier, default=None
+    model : sklearn.ensemble.RandomForestClassifier
         The trained Random Forest Classifier model from the Save the Dislikes capstone.
-    pred_df : pd.DataFrame, default=None
+    pred_df : pd.DataFrame
         The Youtube DataFrame of video data returned by youtube.get_youtube_data.search_youtube().
     verbose : bool, default=True
         Boolean value that controls the verbosity, the messages displayed.
