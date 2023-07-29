@@ -68,7 +68,7 @@ def search_youtube(
         comments : bool = False,
         max_comments : int = 20,
         transcripts : bool = False,
-        trace : bool = True,
+        verbose : bool = True,
     ) -> pd.DataFrame:
 
     r"""
@@ -104,8 +104,8 @@ def search_youtube(
         `comments`==True.
     transcripts : bool, default=False
         Boolean value whether to grab the video transcripts (if available).
-    trace : bool, default=True
-        Boolean value whether to trace the output.
+    verbose : bool, default=True
+        Boolean value that controls the verbosity, the messages displayed.
         
     Returns
     -------
@@ -116,7 +116,7 @@ def search_youtube(
     if order not in ['date', 'rating', 'relevance', 'title', 'videoCount', 'viewCount']:
         raise ValueError(f"Value for order ({order}) is not one of the acceptable values.")
 
-    if trace:
+    if verbose:
         print(f"Searching for: {query}")
 
     # list for each row
@@ -230,7 +230,7 @@ def search_youtube(
     if transcripts == True:
         df.loc[:,'transcript'] = df['video_id'].apply(get_video_transcript)
 
-    if trace:
+    if verbose:
         print(f"Returning {df.shape[0]} results")
 
     return df
@@ -257,11 +257,11 @@ def _clean_youtube_df(youtube_df : pd.DataFrame) -> pd.DataFrame:
 
     # define `is_comments_enabled`, `is_live_content`, and `NoCommentsBinary`
     youtube_df.loc[:,'is_comments_enabled'] = youtube_df['video_comment_count'].apply(
-        lambda x: (int(x) > 0) if x is not np.NaN else False
+        lambda x: ((int(x) > 0) * 1) if x is not np.NaN else 0
     )
     youtube_df.loc[:,'is_live_content'] = youtube_df['live_broadcast_content'].apply(
         # `live_broadcast_content` takes on only 3 values: 'live', 'upcoming', or 'none'
-        lambda x: True if x in ['live', 'upcoming'] else False
+        lambda x: 1 if x in ['live', 'upcoming'] else 0
     )
     youtube_df.loc[:,'NoCommentsBinary'] = youtube_df['is_comments_enabled'].apply(
         lambda x: ((not x) * 1) if x is not np.NaN else x
@@ -270,6 +270,7 @@ def _clean_youtube_df(youtube_df : pd.DataFrame) -> pd.DataFrame:
     # fix dtypes
     youtube_df = youtube_df.astype({
         'video_caption' : 'bool',
+        'video_category_id' : 'int64',
         'video_duration' : float,
         'video_view_count' : float,
         'video_like_count' : float,
