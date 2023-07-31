@@ -130,7 +130,10 @@ def sort_by_sentiment(
     pred_df.loc[:,'sentiment'] = preds
 
     # sort by sentiment
-    df = pred_df.sort_values('sentiment', ascending=False)
+    non_negative_idx = pred_df[pred_df['sentiment'] != -1].index
+    negative_idx = pred_df[pred_df['sentiment'] == -1].index
+    sorted_idx = non_negative_idx.append(negative_idx)
+    df = pred_df.iloc[sorted_idx]
 
     return df
 
