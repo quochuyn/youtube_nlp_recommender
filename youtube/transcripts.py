@@ -25,32 +25,6 @@ def get_video_transcript(video_id : str) -> str:
     except Exception as e:
         # pass silently
         return np.NaN
-    
-
-
-def get_video_transcripts(video_id : Union[list[str],pd.Series]) -> Union[list[str],pd.Series]:
-    r"""
-    Get the video transcripts, if available from the Youtube video IDs.
-    Unavailable transcripts are filled with np.Nan.
-    """
-
-    if isinstance(video_id, list):
-        transcripts = []
-        for id in video_id:
-            try:
-                raw_transcript = YouTubeTranscriptApi.get_transcript(id, languages=['en'])
-                transcript = _convert_raw_transcript_to_string(raw_transcript)
-                clean_transcript = _clean_transcript(transcript)
-                transcripts.append(clean_transcript)
-            except Exception as e:
-                # pass silently
-                transcripts.append(np.NaN)
-    elif isinstance(video_id, pd.Series):
-        transcripts = video_id.apply(get_video_transcript)
-    else:
-        raise ValueError(f"Type of parameter `video_id` ({type(video_id)}) not acceptable.")
-    
-    return transcripts
 
 
 
