@@ -9,9 +9,8 @@ import googleapiclient.discovery
 
 # utils
 import tomli
-from typing import Union
 from .youtube_utils import convert_isodate_to_seconds, get_value_from_key
-from .transcripts import get_video_transcript, get_video_transcripts
+from .transcripts import get_video_transcript
 
 
 
