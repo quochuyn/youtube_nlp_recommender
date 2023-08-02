@@ -185,7 +185,7 @@ if __name__ == "__main__":
     print("Loading model...")
     start_load_time = perf_counter()
     # Path to load the model
-    model_pickle_path = 'save_dislikes/rfclf.joblib.pkl'
+    model_pickle_path = './save_dislikes/rfclf.joblib.pkl'
     rf_clf = joblib.load(model_pickle_path)
     print(f"  Time taken to load model: {(perf_counter() - start_load_time):.4f} seconds")
     print()
