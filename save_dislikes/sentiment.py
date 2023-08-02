@@ -5,7 +5,6 @@ import pandas as pd
 import sklearn
 import sklearn.ensemble
 
-import joblib
 from time import perf_counter
 import warnings
 warnings.filterwarnings("ignore")
@@ -170,46 +169,3 @@ def filter_out_sentiment(
     return df
 
 
-
-if __name__ == "__main__":
-    from sklearn.metrics import accuracy_score, f1_score
-
-    # use testing sample
-    pred_df = pd.read_pickle('./save_dislikes/testing_sample.pkl')
-    y_true = pred_df['ld_score_ohe']
-
-    # print count of each class
-    print(pred_df.groupby('ld_score_ohe').count().iloc[:,0].to_markdown())
-    print()
-
-    print("Loading model...")
-    start_load_time = perf_counter()
-    # Path to load the model
-    model_pickle_path = './save_dislikes/rfclf.joblib.pkl'
-    rf_clf = joblib.load(model_pickle_path)
-    print(f"  Time taken to load model: {(perf_counter() - start_load_time):.4f} seconds")
-    print()
-
-    preds = make_pred(rf_clf, pred_df)
-    print("Testing Sample w/ Desc/Comment Scores")
-    print(f"  Accuracy is: {accuracy_score(y_true, preds)}")
-    print(f"  F1 (Macro) Score is: {f1_score(y_true, preds, average='macro'):.4f}")
-    print()
-
-    pred_df.loc[:,[
-            'age_limit',
-            'desc_neu',
-            'desc_neg',
-            'desc_pos',
-            'desc_compound',
-            'comment_neu',
-            'comment_neg',
-            'comment_pos',
-            'comment_compound',
-            'votes'
-        ]
-    ] = 0
-    preds = make_pred(rf_clf, pred_df)
-    print("Testing Sample w/o Desc/Comment Scores")
-    print(f"  Accuracy is: {accuracy_score(y_true, preds)}")
-    print(f"  F1 (Macro) Score is: {f1_score(y_true, preds, average='macro'):.4f}")
