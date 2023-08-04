@@ -2,11 +2,9 @@
 import streamlit as st
 import psycopg2
 from components.sidebar import sidebar
-from dataservice.thumbnail_images import load_images, fetch_images, select_images
 from streamlit import session_state as session
 from itertools import cycle
 from streamlit_player import st_player
-from st_click_detector import click_detector
 from auth_app import auth_from_db, auth_from_yaml
 from user_profile import modify_profile
 from sqlalchemy import create_engine, text
