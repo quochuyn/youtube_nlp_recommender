@@ -1,14 +1,14 @@
 import openai
+import tiktoken
+from openai.embeddings_utils import get_embedding, cosine_similarity
+import pandas as pd
+import numpy as np
+
 openai.api_key = ""
 embedding = openai.Embedding.create(
     input="Your text goes here", model="text-embedding-ada-002"
 )["data"][0]["embedding"]
-import tiktoken
 
-from openai.embeddings_utils import get_embedding, cosine_similarity
-import pandas as pd
-import numpy as np
-# search through the reviews for a specific product
 def search_titles(df, query, n=3, pprint=True):
     product_embedding = get_embedding(
         query,
