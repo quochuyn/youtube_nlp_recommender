@@ -73,10 +73,10 @@ if __name__ == '__main__':
     import pandas as pd
     import os
     import sys
-    import youtube.get_youtube_data as get_youtube_data
 
     sys.path.insert(0, os.getcwd())
 
+    import youtube.get_youtube_data as get_youtube_data
 
     #these sentences have no words in common yet they are semantically similar
     #they should have a higher cosine similarity than a noisy pair of sentences
