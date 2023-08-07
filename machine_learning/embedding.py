@@ -74,6 +74,7 @@ if __name__ == '__main__':
     import os
     import sys
 
+    # add repo directory so local packages are discoverable (e.g., `youtube`)
     sys.path.insert(0, os.getcwd())
 
     import youtube.get_youtube_data as get_youtube_data
