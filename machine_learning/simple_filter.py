@@ -1,3 +1,5 @@
+#This file is only for offline testing purposes currently.
+
 #Instead of machine learning
 #this will be a baseline approach of using a simple filter to recommend videos
 #of exact word matches between the filter and any video title
@@ -21,5 +23,3 @@ def filter_out_simple(filter_sent,list_of_videos):
     return results
 test_case_1 = filter_out_simple(filter_sent,list_of_videos)
 assert("Who'se Really Supporting Russia" not in test_case_1)
-
-#def filter_out_substring
