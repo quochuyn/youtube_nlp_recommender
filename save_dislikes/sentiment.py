@@ -134,6 +134,14 @@ def sort_by_sentiment(
     sorted_idx = non_negative_idx.append(negative_idx)
     df = pred_df.iloc[sorted_idx]
 
+    if verbose:
+        num_negative_vids = len(negative_idx)
+
+        if num_negative_vids == 0:
+            print(f"\nNo negative videos found. No sorting occured.")
+        else:
+            print(f"\nMoved {num_negative_vids} videos to end of queue.")
+
     return df
 
 
