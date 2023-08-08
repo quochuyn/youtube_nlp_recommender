@@ -16,7 +16,7 @@ RUN apt-get update && apt-get install -y \
     git \
     && rm -rf /var/lib/apt/lists/*
 
-RUN git clone https://krishch72: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@github.com/krishch72/youtube_recommender_app.git
+RUN git clone https://krishch72/youtube_recommender_app.git
 #RUN cd ./youtube_recommender_app && git pull && pip3 install -r requirements.txt && cp /credentials/secrets.toml .secrets/
 RUN cd ./youtube_recommender_app && git pull && pip3 install -r requirements.txt 
 
