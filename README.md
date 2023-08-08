@@ -9,6 +9,16 @@ YouTube and Netflix give users the option to “dislike” a video. But, a disli
 
 # Getting Started
 
+Clone the repository to a local directory:
+```
+git clone https://github.com/krishch72/youtube_recommender_app
+```
+
+Install dependencies:
+```
+pip install -r requirements.txt
+```
+
 Edit `main_app.py` to customize this app to your heart's desire. :heart:
 
 ## Credentials
