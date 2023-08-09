@@ -14,7 +14,7 @@ def sidebar():
         #st.write('Name of option is {}'.format(tabs))
 
     elif tabs == 'Account Setting':
-        account_title = '<p style="font-family:Courier; color:Black; font-size: 20px;">User Personal Settings(Editable)</p>'
+        account_title = '<p style="font-family:Courier; color:Black; font-size: 20px;">User Personal Settings(Click Filter Cell to Edit)</p>'
         st.markdown(account_title, unsafe_allow_html=True)
         #st.title("User Personal Settings")
         #st.write('Name of option is {}'.format(tabs))
