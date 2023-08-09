@@ -31,7 +31,7 @@ Additionally, access to a database for user profiles is also required. There are
 
 If you're using docker to perform a local run, then you will need to create a `secrets.toml` file in the `./.streamlit` directory with the below code. 
 
-For a cloud-based run with Streamlit Cloud, you'll need to paste your Amazon RDS database secrets within the app root at the time of deployment which is explained [here](https://docs.streamlit.io/library/advanced-features/secrets-management).
+For a cloud-based run with Streamlit Cloud, you'll need to paste your Amazon RDS database and Youtube API secrets within the app root at the time of deployment which is explained [here](https://docs.streamlit.io/library/advanced-features/secrets-management).
 
 ```
 [postgres]
