@@ -59,7 +59,7 @@ Installation Instructions - Local Run
 
 ## Streamlit
 
-This streamlit site was setup under the Streamlit Cloud. Read [here](https://blog.streamlit.io/host-your-streamlit-app-for-free/) for more context. Deploying this app on streamlit cloud gives a url that is unique to the GitHub Repo. Streamlit will automatically read from the current version of the associated GitHub Repo.
+This streamlit site was setup under the Streamlit Cloud. Read [here](https://blog.streamlit.io/host-your-streamlit-app-for-free/) for more context. Deploying this app on streamlit cloud gives a url that is unique to the GitHub Repo. Streamlit will read from the current version of the associated GitHub Repo upon refresh.
 
 Streamlit Hosting Instructions - Cloud Run
 
