@@ -1,6 +1,6 @@
 # Youtube Recommender App
 
-YouTube and Netflix give users the option to “dislike” a video. But, a dislike on a video does not tell the algorithm what specifically the user is upset about. Our project overcomes this with a **natural language filter bar** that uses **artificial intelligence** (BERT or ChatGPT) behind the scenes to make Youtube video recommendations more personalized and less manipulative.
+YouTube and Netflix give users the option to “dislike” a video. But, a dislike on a video does not tell the algorithm what specifically the user is upset about. Our project overcomes this with a **natural language filter bar** that uses **artificial intelligence** (BERT or ChatGPT) behind the scenes to make Youtube video recommendations more personalized and less manipulative. This is a research project for the Masters of Applied Data Science at the University of Michigan.
 
 # Key Links
 - [Github Repository](https://github.com/krishch72/youtube_recommender_app) (here!)
