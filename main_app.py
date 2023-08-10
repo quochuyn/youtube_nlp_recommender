@@ -19,7 +19,6 @@ MAX_VIDS = 15
 if 'search_words' not in st.session_state:
     st.session_state.search_words = None
     st.session_state.youtube_df = pd.DataFrame()
-    st.session_state.filter_model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
 
 dbcredentials = st.secrets["postgres"]
 
@@ -29,6 +28,11 @@ dbEngine = create_engine('postgresql+psycopg2://' +
     dbcredentials['host'] + ':' +
     str(dbcredentials['port']) + '/' +
     dbcredentials['dbname'])
+
+@st.cache_resource
+def init_BERT_model():
+    model = SentenceTransformer('sentence-transformers/all-MiniLM-L6-v2')
+    return model
 
 def init_connection():
     return psycopg2.connect(**st.secrets["postgres"])
@@ -54,6 +58,7 @@ def get_youtube_videos(input_query):
 def youtube_app(username):
     conn = init_connection()
     tabs = sidebar()
+    filter_model = init_BERT_model()
 
     if tabs == 'Dashboard':
         profile_df = pd.read_sql(sql = text("select search_words, filtered_words " + \
@@ -86,7 +91,7 @@ def youtube_app(username):
             if len(input_filter) > 0:
                 titles = st.session_state.youtube_df['title'].values
                 #print("Titles ", titles, type(titles))
-                filtered_titles = embedding.filter_out_embed(st.session_state.filter_model, input_filter, titles)
+                filtered_titles = embedding.filter_out_embed(filter_model, input_filter, titles)
                 filtered_df = st.session_state.youtube_df[st.session_state.youtube_df['title'].isin(filtered_titles)]
                 for idx, row in filtered_df.head(session.slider_count).iterrows():
                     with next(cols):
