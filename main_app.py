@@ -66,8 +66,8 @@ def youtube_app(username):
         print("profile searchwords ", profile_searchwords, type(profile_searchwords))
         print("profile filtered_words ", profile_filtered_words, type(profile_filtered_words))
 
-        input_query = st.text_input("Enter Query", value = ','.join(profile_searchwords))
-        input_filter = st.text_input("Enter Filters", value = ','.join(profile_filtered_words))
+        input_query = st.text_input("$Enter\;Query$", value = ','.join(profile_searchwords))
+        input_filter = st.text_input("$Enter\;Filters$", value = ','.join(profile_filtered_words))
 
         print("input_query ", input_query, type(input_query))
         print("input_filter ", input_filter, type(input_filter))
@@ -109,11 +109,11 @@ def youtube_app(username):
 app_layout()
 
 authenticator = auth_from_db()
-name, authentication_status, username = authenticator.login('Login', 'main')
+name, authentication_status, username = authenticator.login('Login \n Username Hint: qh \n Password Hint: test', 'main')
 
 if authentication_status:
     authenticator.logout('Logout', 'main', key='unique_key')
-    st.write(f'Welcome *{name}*')
+    st.write(f'$Welcome\;*{name}*$')
     youtube_app(username)
 elif authentication_status is False:
     st.error('Username/password is incorrect')
