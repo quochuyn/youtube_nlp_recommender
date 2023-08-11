@@ -68,4 +68,4 @@ Streamlit Hosting Instructions - Cloud Run
 
 # Data Access Statement
 
-The data is accessed live through Youtube's API and belongs to Youtube and its affilaites according to its [Terms of Services](https://developers.google.com/youtube/terms/api-services-terms-of-service).
+The data is accessed live through Youtube's API and belongs to Youtube and its affiliates according to its [Terms of Services](https://developers.google.com/youtube/terms/api-services-terms-of-service).
