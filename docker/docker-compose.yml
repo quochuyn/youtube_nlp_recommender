@@ -14,7 +14,7 @@ services:
    container_name: pgdb
    environment:
          - POSTGRES_USER=postgres
-         - POSTGRES_PASSWORD=capstone
+         - POSTGRES_PASSWORD=xxxxxxx
          - POSTGRES_DB=postgres
    ports:
          - "6432:5432"
