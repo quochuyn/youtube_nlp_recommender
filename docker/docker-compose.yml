@@ -9,12 +9,12 @@ services:
       - "8501:8501"
     volumes:
       - /Users/kchawla/OneDrive/MADS/Term4_Capstone_siads699/team_project/credentials:/credentials
-  db:
-   image: postgres:12
-   container_name: pgdb
-   environment:
-         - POSTGRES_USER=postgres
-         - POSTGRES_PASSWORD=xxxxxxx
-         - POSTGRES_DB=postgres
-   ports:
-         - "6432:5432"
+#  db:
+#   image: postgres:12
+#   container_name: pgdb
+#   environment:
+#         - POSTGRES_USER=postgres
+#         - POSTGRES_PASSWORD=xxxxxxx
+#         - POSTGRES_DB=postgres
+#   ports:
+#         - "6432:5432"
