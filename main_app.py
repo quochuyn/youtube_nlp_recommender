@@ -12,6 +12,7 @@ import pandas as pd
 import youtube.get_youtube_data as get_youtube_data
 from sentence_transformers import SentenceTransformer
 import machine_learning.embedding as embedding
+from components.footer import  my_footer
 
 YOUTUBE_API_KEY = st.secrets["api"]["key1"]
 MAX_VIDS = 15
@@ -43,6 +44,7 @@ def app_layout():
     st.markdown(app_header, unsafe_allow_html=True)
 
     st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
+    my_footer()
 
 def get_youtube_videos(input_query):
     print("Calling youtube_api..")
@@ -111,10 +113,11 @@ def youtube_app(username):
                         #st.markdown(video_title, unsafe_allow_html=True)
     elif tabs == 'Account Setting':
         modify_profile(conn, username)
+        
 app_layout()
 
 authenticator = auth_from_db()
-name, authentication_status, username = authenticator.login('Login \n Username Hint: qh \n Password Hint: test', 'main')
+name, authentication_status, username = authenticator.login('Login \n Username Hint: guest \n Password Hint: test', 'main')
 
 if authentication_status:
     authenticator.logout('Logout', 'main', key='unique_key')

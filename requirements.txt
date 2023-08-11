@@ -17,3 +17,4 @@ openai==0.27.8
 tiktoken==0.4.0
 youtube-transcript-api==0.6.1
 ipykernel==6.25.1
+htbuilder==0.6.1
