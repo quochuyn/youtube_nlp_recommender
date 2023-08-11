@@ -47,7 +47,7 @@ key1 = "your_youtube_api_key"
 
 ## Docker
 
-Installation Instructions - Local Run
+Installation Instructions - Local Run (Not necessary for making a Streamlit website for free)
 
   0. If you don't have Docker: You can get Docker Desktop here https://docs.docker.com/compose/install/index.html
   1. cd docker
