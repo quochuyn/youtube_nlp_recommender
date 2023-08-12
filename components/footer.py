@@ -65,6 +65,6 @@ def layout(*args):
 
 def my_footer():
     myargs = [
-        "Explore with confidence, we don't track or store search keywords and results ",
+        "Explore with confidence, the defaults do not track or store search keywords and results \n",
     ]
     layout(*myargs)
