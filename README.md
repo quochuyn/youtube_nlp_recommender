@@ -69,3 +69,6 @@ Streamlit Hosting Instructions - Cloud Run
 # Data Access Statement
 
 The data is accessed live through Youtube's API and belongs to Youtube and its affiliates according to its [Terms of Services](https://developers.google.com/youtube/terms/api-services-terms-of-service).
+
+# Privacy Statement
+The default version of the app does not store user searches or preferences. The user can choose to go to the Account Setting tab to enable the saving of those preferences.
