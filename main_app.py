@@ -62,7 +62,7 @@ def youtube_app(username):
     tabs = sidebar()
     filter_model = init_BERT_model()
 
-    if tabs == 'Dashboard':
+    if tabs == 'Videos':
         profile_df = pd.read_sql(sql = text("select search_words, filtered_words " + \
                                     " from user_profile where username = '" + username + "'"), 
                                     con=dbEngine.connect())

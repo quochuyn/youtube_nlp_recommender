@@ -4,10 +4,10 @@ import streamlit as st
 
 def sidebar():
     with st.sidebar:
-        tabs = on_hover_tabs(tabName=['Dashboard', 'Account Setting'], 
-                            iconName=['dashboard', 'manage_accounts'], default_choice=0)
+        tabs = on_hover_tabs(tabName=['Videos', 'Account Setting'], 
+                            iconName=['Videos', 'manage_accounts'], default_choice=0)
 
-    if tabs =='Dashboard':
+    if tabs =='Videos':
         dashboard_title = '<p style="font-family:Courier; color:Black; font-size: 20px;">Youtube Video Search</p>'
         st.markdown(dashboard_title, unsafe_allow_html=True)
         #st.title("Youtube Video Search")
