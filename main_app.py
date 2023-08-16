@@ -15,7 +15,7 @@ import machine_learning.embedding as embedding
 from components.footer import  my_footer
 
 YOUTUBE_API_KEY = st.secrets["api"]["key1"]
-MAX_VIDS = 50
+MAX_VIDS = 15
 
 if 'search_words' not in st.session_state:
     st.session_state.search_words = None
@@ -46,7 +46,6 @@ def app_layout():
     st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
     my_footer()
 
-@st.cache_data
 def get_youtube_videos(input_query):
     print("Calling youtube_api..")
     youtube_client = get_youtube_data.make_client(YOUTUBE_API_KEY)
