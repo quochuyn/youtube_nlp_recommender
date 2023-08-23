@@ -18,4 +18,4 @@ tiktoken==0.4.0
 youtube-transcript-api==0.6.1
 ipykernel==6.25.1
 htbuilder==0.6.1
-trubrics==1.3.6
+trubrics-sdk==1.3.6
