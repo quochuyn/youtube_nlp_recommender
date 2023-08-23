@@ -13,6 +13,8 @@ def write_feedback(conn):
     r"""
     Provide an anonymous feedback form for users of the web app. Loosely following this guide:
     https://blog.streamlit.io/collecting-user-feedback-on-ml-in-streamlit/
+
+    TODO: follow the updated guide https://blog.streamlit.io/trubrics-a-user-feedback-tool-for-your-ai-streamlit-apps/
     """
 
     dbcredentials = st.secrets["postgres"]
