@@ -7,6 +7,7 @@ from itertools import cycle
 from streamlit_player import st_player
 from auth_app import auth_from_db, auth_from_yaml
 from user_profile import modify_profile
+from provide_feedback import write_feedback
 from sqlalchemy import create_engine, text
 import pandas as pd
 import youtube.get_youtube_data as get_youtube_data
@@ -15,7 +16,7 @@ import machine_learning.embedding as embedding
 from components.footer import  my_footer
 
 YOUTUBE_API_KEY = st.secrets["api"]["key1"]
-MAX_VIDS = 15
+MAX_VIDS = 50
 
 if 'search_words' not in st.session_state:
     st.session_state.search_words = None
@@ -46,6 +47,7 @@ def app_layout():
     st.markdown('<style>' + open('./components/style.css').read() + '</style>', unsafe_allow_html=True)
     my_footer()
 
+@st.cache_data
 def get_youtube_videos(input_query):
     print("Calling youtube_api..")
     youtube_client = get_youtube_data.make_client(YOUTUBE_API_KEY)
@@ -113,6 +115,8 @@ def youtube_app(username):
                         #st.markdown(video_title, unsafe_allow_html=True)
     elif tabs == 'Account Setting':
         modify_profile(conn, username)
+    elif tabs == 'Provide Feedback':
+        write_feedback()
         
 app_layout()
 
