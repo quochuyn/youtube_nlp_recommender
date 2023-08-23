@@ -116,7 +116,7 @@ def youtube_app(username):
     elif tabs == 'Account Setting':
         modify_profile(conn, username)
     elif tabs == 'Provide Feedback':
-        write_feedback()
+        write_feedback(conn)
         
 app_layout()
 

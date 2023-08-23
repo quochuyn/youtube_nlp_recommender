@@ -8,9 +8,9 @@ from sqlalchemy import create_engine
 
 
 
-def write_feedback(conn, username):
+def write_feedback(conn):
     r"""
-    Provide a feedback form for users of the web app.
+    Provide an anonymous feedback form for users of the web app.
     """
 
     dbcredentials = st.secrets["postgres"]
@@ -26,6 +26,8 @@ def write_feedback(conn, username):
 
         default_text = ""
         feedback_text = st.text_area("$Give\;Feedback$", value=default_text)
+
+        st.write("What do you think of the web app?")
 
         submitted = st.form_submit_button("Submit")
         if submitted:
