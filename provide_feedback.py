@@ -11,6 +11,8 @@ from sqlalchemy import create_engine
 def write_feedback(conn):
     r"""
     Provide an anonymous feedback form for users of the web app.
+
+    TODO: https://blog.streamlit.io/trubrics-a-user-feedback-tool-for-your-ai-streamlit-apps/
     """
 
     dbcredentials = st.secrets["postgres"]
@@ -25,11 +27,9 @@ def write_feedback(conn):
     with st.form("feedback_form"):
 
         default_text = ""
-        feedback_text = st.text_area("$Give\;Feedback$", value=default_text)
-
-        st.write("What do you think of the web app?")
+        feedback_text = st.text_area("What do you think of the web app?", value=default_text)
 
         submitted = st.form_submit_button("Submit")
         if submitted:
-            # write response to database
+            # TODO: write response to database
             st.write(f"You wrote: {feedback_text}")
