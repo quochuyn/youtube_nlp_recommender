@@ -115,7 +115,7 @@ def youtube_app(username):
                         #st.markdown(video_title, unsafe_allow_html=True)
     elif tabs == 'Account Setting':
         modify_profile(conn, username)
-    elif tabs == 'Provide Feedback':
+    elif tabs == 'Feedback':
         write_feedback(conn)
         
 app_layout()
