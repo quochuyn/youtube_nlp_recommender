@@ -35,5 +35,6 @@ def write_feedback(conn):
     thumbs_feedback = thumb_collector.st_feedback(
         feedback_type='thumbs',
         model='my_model', # TODO: what to put here?
-        open_feedback_label="What do you think of the web app?"
+        open_feedback_label="What do you think of the web app?",
+        align='flex-start',
     )
