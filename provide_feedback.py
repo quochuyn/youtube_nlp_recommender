@@ -29,7 +29,7 @@ def write_feedback(conn):
     collector = FeedbackCollector(
         component_name='feedback_component',
         email=trubrics_credentials['email'], # Store your Trubrics credentials in st.secrets:
-        password=st.secrets['password'], # https://blog.streamlit.io/secrets-in-sharing-apps/
+        password=trubrics_credentials['password'], # https://blog.streamlit.io/secrets-in-sharing-apps/
     )
 
     with st.form('feedback_form'):
