@@ -32,20 +32,14 @@ def write_feedback(conn):
         password=trubrics_credentials['password'], # https://blog.streamlit.io/secrets-in-sharing-apps/
     )
 
-    text_feedback = collector.st_feedback(
-        feedback_type='textbox',
-        model='my_model', # TODO: what to put here?
-        open_feedback_label="What do you think of the web app?",
-    )
-
     thumbs_feedback = collector.st_feedback(
         feedback_type='thumbs',
         model='my_model', # TODO: what to put here?
         open_feedback_label=""
     )
 
-    submitted = st.form_submit_button("Submit")
-    if submitted:
-        # TODO: write response to database
-        st.write(f"You wrote: {text_feedback}")
-        st.write(f"You gave a thumbs: {thumbs_feedback}, {type(thumbs_feedback)}")
+    text_feedback = collector.st_feedback(
+        feedback_type='textbox',
+        model='my_model', # TODO: what to put here?
+        open_feedback_label="What do you think of the web app?",
+    )
