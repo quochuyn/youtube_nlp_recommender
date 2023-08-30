@@ -11,7 +11,7 @@ YouTube and Netflix give users the option to “dislike” a video. But, a disli
 
 Clone the repository to a local directory:
 ```
-git clone https://github.com/krishch72/youtube_recommender_app
+git clone https://github.com/quochuyn/youtube_nlp_recommender
 ```
 
 Install dependencies:
