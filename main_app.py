@@ -121,7 +121,12 @@ def youtube_app(username):
 app_layout()
 
 authenticator = auth_from_db()
-name, authentication_status, username = authenticator.login('Login \n Username Hint: guest \n Password Hint: test', 'main')
+# name, authentication_status, username = authenticator.login('Login \n Username Hint: guest \n Password Hint: test', 'main')
+
+# cheat for removing authentication/login friction
+name = 'guest'
+authentication_status = True
+username = 'guest'
 
 if authentication_status:
     authenticator.logout('Logout', 'main', key='unique_key')
