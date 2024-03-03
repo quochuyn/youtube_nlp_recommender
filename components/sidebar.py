@@ -4,8 +4,8 @@ import streamlit as st
 
 def sidebar():
     with st.sidebar:
-        tabs = on_hover_tabs(tabName=['Videos', 'Account Setting', 'Feedback'], 
-                            iconName=['Videos', 'manage_accounts', 'Feedback'], default_choice=0)
+        tabs = on_hover_tabs(tabName=['Videos', 'Account Setting'], 
+                            iconName=['Videos', 'manage_accounts'], default_choice=0)
 
     if tabs =='Videos':
         dashboard_title = '<p style="font-family:Courier; color:Black; font-size: 20px;">Youtube Video Search</p>'
@@ -18,10 +18,6 @@ def sidebar():
         st.markdown(account_title, unsafe_allow_html=True)
         #st.title("User Personal Settings")
         #st.write('Name of option is {}'.format(tabs))
-
-    elif tabs == 'Feedback':
-        feedback_title = '<p style="font-family:Courier; color:Black; font-size: 20px;">Provide Feedback</p>'
-        st.markdown(feedback_title, unsafe_allow_html=True)
     
     return tabs
     
