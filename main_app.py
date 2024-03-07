@@ -7,7 +7,6 @@ from itertools import cycle
 from streamlit_player import st_player
 from auth_app import auth_from_db, auth_from_yaml
 from user_profile import modify_profile
-from provide_feedback import write_feedback
 from sqlalchemy import create_engine, text
 import pandas as pd
 import youtube.get_youtube_data as get_youtube_data

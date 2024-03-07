@@ -6,7 +6,6 @@ import pandas as pd
 from sqlalchemy import create_engine, text
 import yaml
 from yaml.loader import SafeLoader
-#from main_app import utube_app, app_layout
 
 def auth_from_db():
     dbcredentials = st.secrets["postgres"]
