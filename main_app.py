@@ -10,16 +10,18 @@ from user_profile import modify_profile
 from sqlalchemy import create_engine, text
 import pandas as pd
 import youtube.get_youtube_data as get_youtube_data
-from sentence_transformers import SentenceTransformer
+from sentence_transformers import SentenceTransformer, util
 import machine_learning.embedding as embedding
 from components.footer import  my_footer
+import time
 
 YOUTUBE_API_KEY = st.secrets["api"]["key1"]
 MAX_VIDS = 50
 
 if 'search_words' not in st.session_state:
-    st.session_state.search_words = None
-    st.session_state.youtube_df = pd.DataFrame()
+    st.session_state['search_words'] = None
+if 'youtube_df' not in st.session_state:
+    st.session_state['youtube_df'] = pd.DataFrame()
 
 dbcredentials = st.secrets["postgres"]
 
@@ -81,21 +83,27 @@ def youtube_app(username):
         print("input_filter ", input_filter, type(input_filter))
 
         session.slider_count = st.slider(label="video_count", min_value=1, max_value=50)
-        st.text("")
+        # st.text("")
 
         if len(input_query) > 0:
             cols = cycle(st.columns(3))
 
             # no need to call api if results are alearedy fetched for the search words
             if st.session_state.search_words != input_query:
-                st.session_state.search_words = input_query
-                st.session_state.youtube_df = get_youtube_videos(input_query)
+                st.session_state['search_words'] = input_query
+                # my_start_time = time.time()
+                st.session_state['youtube_df'] = get_youtube_videos(input_query)
+                # print(f"Took {time.time() - my_start_time} seconds to run `get_youtube_videos`")
 
             if len(input_filter) > 0:
                 titles = st.session_state.youtube_df['title'].values
-                #print("Titles ", titles, type(titles))
-                filtered_titles = embedding.filter_out_embed(filter_model, input_filter, titles)
+                # print("Titles ", titles, type(titles))
+                # my_start_time = time.time()
+                filtered_titles = embedding.filter_out_embed(filter_model, input_filter, titles, session.slider_count)
+                # print(f"Took {time.time() - my_start_time} seconds to run `filter_youtube_videos`")
+                # my_start_time = time.time()
                 filtered_df = st.session_state.youtube_df[st.session_state.youtube_df['title'].isin(filtered_titles)]
+                # print(f"Took {time.time() - my_start_time} seconds to run datafrane title isin method")
                 for idx, row in filtered_df.head(session.slider_count).iterrows():
                     with next(cols):
                         # Embed a youtube video

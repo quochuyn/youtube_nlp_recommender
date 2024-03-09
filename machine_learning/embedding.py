@@ -14,7 +14,7 @@ from sklearn.metrics.pairwise import cosine_similarity
 
 
 
-def filter_out_embed(model, filter_sent : str, list_of_videos : list, threshold : int = 0.19):
+def filter_out_embed(model, filter_sent : str, list_of_videos : list, max_vids : int = None, threshold : int = 0.19):
     r"""
     Takes in a filter sentence and a list of video string titles and returns
     video titles that are less than 0.19 cosine similarity.
@@ -29,6 +29,8 @@ def filter_out_embed(model, filter_sent : str, list_of_videos : list, threshold 
         search query.
     list_of_videos : list
         The list of titles to be encoded by the `model`.
+    max_vids : int, optional
+        The maximum number of videos to return.
     threshold : int, default=0.19
         The threshold to filter videos by cosine similarity comparison.
 
@@ -47,6 +49,8 @@ def filter_out_embed(model, filter_sent : str, list_of_videos : list, threshold 
        # print(result,i)
         if result.item()<threshold:
             results.append(i)
+            if max_vids is not None and len(results) > max_vids:
+                break
     # print(results,"yea")##
     return results
 
