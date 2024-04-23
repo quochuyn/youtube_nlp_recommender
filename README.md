@@ -5,7 +5,8 @@ YouTube and Netflix give users the option to “dislike” a video. But, a disli
 # Key Links
 - [Streamlit App](https://youtube-capstone.streamlit.app/)
 - [Medium Article](https://medium.com/@gabrielalon257/youtube-filtering-capstone-67f755fb6dca)
-- [Video](https://drive.google.com/file/d/10EIKd1QhmoLsq2TeQgsYkP51RMODiRMc/view?usp=drive_link)
+- [Research Poster](https://drive.google.com/file/d/1fbkjsChxA_kINFSDvluDN6QNpTsqON04/view?usp=sharing)
+- [Video](https://www.youtube.com/watch?v=T_uKgvzt8M0)
 
 # Getting Started
 
